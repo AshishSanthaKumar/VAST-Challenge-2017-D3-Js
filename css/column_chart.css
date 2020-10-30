@@ -1,0 +1,29 @@
+.axis text {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20pt;
+  }
+  .axis .label {
+    font-size: 20pt;
+  }
+
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .x.axis text {
+    font-size: 20pt;
+  }
+
+
+  #columnchart {
+    margin:auto;
+    width:1300px;
+  }
+
+  svg {
+    border:1px solid gray;
+    margin:5px;
+  
+  }

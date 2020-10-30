@@ -28,11 +28,11 @@ document.addEventListener('DOMContentLoaded', function()
 
 function drawCharts()
 {
-    drawColumnChart("2016-04-01 05:00:00")
+    drawColumnChart("2016-04-01 05:00:00","2016-04-04 19:00:00")
 }
 
 
-function drawColumnChart(dateVal)
+function drawColumnChart(dateVal1,dateVal2)
 {
 
     columnSvg=d3.select("#columnchart").append("svg")
@@ -41,28 +41,68 @@ function drawColumnChart(dateVal)
                 .append("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    var localColumn= columnData.filter(function(d){ return d["RowLabels"]==dateVal})
+    var flag=1;
 
-    localColumn=localColumn[0];
-
-    localData=[];
-
-    delete localColumn['RowLabels'];
-    delete localColumn['GrandTotal'];
-
-    for (var key in localColumn) {
-        if (localColumn.hasOwnProperty(key)) {
-            localData.push({
-                "chemical":key,
-                "reading":Number(localColumn[key])
-            });
+    var localColumn= columnData.filter(function(d){
+        if(d["RowLabels"]==dateVal1)
+        {
+            flag=0;
+            return true;
         }
+        if(d["RowLabels"]==dateVal2)
+        {
+            flag=1;
+            return true;
+        }
+        if(flag==0)
+            return true;
+        else
+            return false;
+    })
+
+    var i;
+    for(i=0;i<localColumn.length;i++)
+    {
+    delete localColumn[i]['RowLabels'];
+    delete localColumn[i]['GrandTotal'];
     }
 
+    "AGOC-3A","Appluimonia","Chlorodinine","Methylosmolene"
+    localData=[
+        {
+            "chemical":"AGOC-3A",
+            "reading":0
+        },
+        {
+            "chemical":"Appluimonia",
+            "reading":0
+        },
+        {
+            "chemical":"Chlorodinine",
+            "reading":0
+        },
+        {
+            "chemical":"Methylosmolene",
+            "reading":0
+        }
+    ]
 
-    console.log(localData);
+    for(i=0;i<localColumn.length;i++)
+    {
+    localData[0]['reading']  =localData[0]['reading'] +Number(localColumn[i]['AGOC-3A']);
+    localData[1]['reading']  =localData[1]['reading'] +Number(localColumn[i]['Appluimonia']);
+    localData[2]['reading']  =localData[1]['reading'] +Number(localColumn[i]['Chlorodinine']);
+    localData[3]['reading']  =localData[1]['reading'] +Number(localColumn[i]['Methylosmolene']);
+    }
 
-    // set the dimensions and margins of the graph
+   // console.log(localData);
+
+
+
+
+
+
+    //set the dimensions and margins of the graph
 
 
 // set the ranges

@@ -45,11 +45,53 @@
 
   #column-container {
     margin:auto;
-    width:1300px;
+    width:650px;
+    display: inline;
   }
 
   #column-container svg {
     border:1px solid gray;
     margin:5px;
   
+  }
+
+  #radialchart, #col{
+    display: inline-block;
+    width: 650px;
+  }
+  #radialchart svg{
+    margin: 0px auto;
+    display: block;
+  }
+
+  #radialchart path.arc {
+    opacity: 0.9;
+    transition: opacity 0.5s;
+  }
+
+  #radialchart path.arc:hover {
+    opacity: 0.7;
+  }
+
+  #radialchart .axis line, .axis circle  {
+    stroke: #cccccc;
+    stroke-width: 1px
+  }
+
+  #radialchart .axis circle {
+    fill: none;
+  }
+
+  #radialchart .r.axis text {
+    text-anchor: end
+  }
+
+  #radialchart .tooltip {
+    position: absolute;
+    display: none;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 3px;
+    box-shadow: -3px 3px 15px #888;
+    color: white;
+    padding: 6px;
   }

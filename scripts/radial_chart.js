@@ -153,7 +153,7 @@ function drawRadialChart(dateVal1,dateVal2)
     
       radialAxis.append('text')
         .attr('x', labelPadding)
-        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding)
+        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding+7)
         .text(d => d.monitor);
     
       let axialAxis = radial_svg.append('g')

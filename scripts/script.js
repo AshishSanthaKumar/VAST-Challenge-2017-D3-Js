@@ -3,9 +3,10 @@ var globalData;
 var c10 = d3.scaleOrdinal(d3.schemeTableau10).domain(["AGOC-3A","Appluimonia","Chlorodinine","Methylosmolene"]);
 
 function dateFormatter(dateToChange)
-{
+{   console.log(dateToChange);
     var arr = dateToChange.split(/-|\s|:/);// split string and create array.
     dateToChange = new Date(arr[0], arr[1] -1, arr[2], arr[3], arr[4], arr[5]); // decrease month value by 1
+    console.log(dateToChange);
     return dateToChange;
 }
 

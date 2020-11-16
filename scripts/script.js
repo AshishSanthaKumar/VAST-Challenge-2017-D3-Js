@@ -13,7 +13,7 @@ function dateFormatter(dateToChange)
 document.addEventListener('DOMContentLoaded', function()
 {
     // Load all files before doing anything else
-    Promise.all([d3.csv('data/column_data.csv')])
+    Promise.all([d3.csv('MC2Data/column_data.csv')])
             .then(function(values){
                 globalData=values[0];
                 globalData.map(function(data)
@@ -229,14 +229,3 @@ function drawColumnChart(startDate,endDate)
     columnSvg.append("g")
     .call(d3.axisLeft(y).ticks(4));
 }
-
-
-
-
-
-
-
-
-
-
-

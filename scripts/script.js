@@ -145,7 +145,7 @@ function drawColumnChart(startDate,endDate)
 {
 
     var columnSvg;
-    const margin = {top: 30, right: 30, bottom: 30, left:60};
+    const margin = {top: 30, right: 30, bottom: 40, left:60};
     const columnChartWidth = 600 - margin.left - margin.right;
     const columnChartHeight =  400- margin.top - margin.bottom;
     
@@ -202,8 +202,7 @@ function drawColumnChart(startDate,endDate)
     var y = d3.scaleLinear()
         .range([columnChartHeight, 0]);
 
-
-
+  
 
     // Scale the range of the data in the domains
     x.domain(localData.map(function(d) { return d.chemical; }));
@@ -228,4 +227,21 @@ function drawColumnChart(startDate,endDate)
     // add the y Axis
     columnSvg.append("g")
     .call(d3.axisLeft(y).ticks(4));
+
+
+    columnSvg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x",0 - (columnChartHeight / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Chemical Reading");  
+
+
+    columnSvg.append("text")             
+    .attr("transform",
+          "translate(" + (columnChartWidth/2) + " ," + 
+                         (columnChartHeight + margin.top+3) + ")")
+    .style("text-anchor", "middle")
+    .text("Chemicals");
 }

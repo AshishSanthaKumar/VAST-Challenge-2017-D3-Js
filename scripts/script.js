@@ -565,7 +565,8 @@ console.log(selectedSensor);
 
 function drawHeatMap(startDate,endDate){
     // d3.select("#heatmap").selectAll("*").remove();
-    
+    sensorval = document.getElementById('sensor').value;
+    console.log(sensorval);
     var startdateString = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000 ))
                     .toISOString()
                     .split("T")[0];
@@ -579,7 +580,7 @@ function drawHeatMap(startDate,endDate){
           colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
           days = ["AGOC-3A", "Appluimonia", "Chlorodinine", "Methylosmolene"],
           times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
-          datasets = ["../MC2Data/sensor_1_new.json"];
+          datasets = [`../MC2Data/sensor_${parseInt(sensorval)}_new.json`];
 
           console.log(d3.schemeBlues);
     d3.select("#heatmap").selectAll("*").remove();
@@ -634,7 +635,7 @@ function drawHeatMap(startDate,endDate){
               .attr("class", "hour bordered")
               .attr("width", gridSize)
               .attr("height", gridSize)
-              .transition().duration(500)
+            //   .transition().duration(500)
               .style("fill", function(d) { return colorScale((d.value)); });
 
           cards.select("title").text(function(d) { return (d.value); });

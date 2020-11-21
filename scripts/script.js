@@ -199,6 +199,11 @@ function drawColumnChart(startDate,endDate)
     localData[3]['reading']  =localData[3]['reading'] +Number(localColumn[i]['Methylosmolene'+selected]);
     }
 
+    // localData[0]['reading'] = localData[0]['reading']/localColumn.length;
+    // localData[1]['reading'] = localData[1]['reading']/localColumn.length;
+    // localData[2]['reading'] = localData[2]['reading']/localColumn.length;
+    // localData[3]['reading'] = localData[3]['reading']/localColumn.length;
+
 
 
 

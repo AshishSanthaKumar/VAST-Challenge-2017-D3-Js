@@ -1,5 +1,4 @@
 var globalData;
-var radialData;
 
 var c10 = d3.scaleOrdinal(d3.schemeTableau10).domain(["AGOC-3A","Appluimonia","Chlorodinine","Methylosmolene"]);
 
@@ -14,10 +13,9 @@ function dateFormatter(dateToChange)
 document.addEventListener('DOMContentLoaded', function()
 {
     // Load all files before doing anything else
-    Promise.all([d3.csv('MC2Data/column_formated.csv'), d3.csv('MC2Data/radial_chart_data_clean.csv')])
+    Promise.all([d3.csv('MC2Data/column_formated.csv')])
             .then(function(values){
                 globalData=values[0];
-                radialData=values[1];
                 globalData.map(function(data)
                 {
                     data['RowLabels']=dateFormatter(data['RowLabels']);
@@ -25,10 +23,7 @@ document.addEventListener('DOMContentLoaded', function()
                         if(data[key]=='')
                             data[key]='0';
                 })
-                radialData.map(function(data)
-                {
-                    data['Date']=dateFormatter(data['Date']);
-                })
+                
                 drawPage();
             })
 })
@@ -369,9 +364,9 @@ function drawRadialChart(startDate,endDate){
                     .append('g')
                     .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-    var radial= radialData.filter(function(d){
-        return d['Date']>=startDate && d['Date']<=endDate;
-    });
+    // var radial= radialData.filter(function(d){
+    //     return d['Date']>=startDate && d['Date']<=endDate;
+    // });
 
     localData=[
         {

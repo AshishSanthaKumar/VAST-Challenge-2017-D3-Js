@@ -14,13 +14,16 @@ function dateFormatter(dateToChange)
 document.addEventListener('DOMContentLoaded', function()
 {
     // Load all files before doing anything else
-    Promise.all([d3.csv('MC2Data/column_data.csv'), d3.csv('MC2Data/radial_chart_data_clean.csv')])
+    Promise.all([d3.csv('MC2Data/column_formated.csv'), d3.csv('MC2Data/radial_chart_data_clean.csv')])
             .then(function(values){
                 globalData=values[0];
                 radialData=values[1];
                 globalData.map(function(data)
                 {
                     data['RowLabels']=dateFormatter(data['RowLabels']);
+                    for(var key in data)
+                        if(data[key]=='')
+                            data[key]='0';
                 })
                 radialData.map(function(data)
                 {
@@ -158,7 +161,9 @@ function drawColumnChart(startDate,endDate)
     
     var maxY;
     var barPadding = 0.2;
-    
+
+    var selected='All';
+
     d3.select("#column-container").selectAll("*").remove();
     columnSvg=d3.select("#column-container").append("svg")
                 .attr("width", columnChartWidth + margin.left + margin.right)
@@ -193,10 +198,10 @@ function drawColumnChart(startDate,endDate)
 
     for(i=0;i<localColumn.length;i++)
     {
-    localData[0]['reading']  =localData[0]['reading'] +Number(localColumn[i]['AGOC-3A']);
-    localData[1]['reading']  =localData[1]['reading'] +Number(localColumn[i]['Appluimonia']);
-    localData[2]['reading']  =localData[2]['reading'] +Number(localColumn[i]['Chlorodinine']);
-    localData[3]['reading']  =localData[3]['reading'] +Number(localColumn[i]['Methylosmolene']);
+    localData[0]['reading']  =localData[0]['reading'] +Number(localColumn[i]['AGOC-3A'+selected]);
+    localData[1]['reading']  =localData[1]['reading'] +Number(localColumn[i]['Appluimonia'+selected]);
+    localData[2]['reading']  =localData[2]['reading'] +Number(localColumn[i]['Chlorodinine'+selected]);
+    localData[3]['reading']  =localData[3]['reading'] +Number(localColumn[i]['Methylosmolene'+selected]);
     }
 
 

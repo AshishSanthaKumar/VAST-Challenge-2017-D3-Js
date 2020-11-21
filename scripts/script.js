@@ -259,6 +259,93 @@ function drawColumnChart(startDate,endDate)
 }
 
 function drawRadialChart(startDate,endDate){
+
+    var localRadial= globalData.filter(function(d){
+        return d['RowLabels']>=startDate && d['RowLabels']<=endDate;
+    });
+
+    var jsonRadial=
+    {
+        '1':{
+            'AGOC-3A':[],
+            'Appluimonia':[],
+            'Chlorodinine':[],
+            'Methylosmolene':[],
+            'yes':0
+        },
+        '2':{
+            'AGOC-3A':[],
+            'Appluimonia':[],
+            'Chlorodinine':[],
+            'Methylosmolene':[],
+            'yes':0
+        },
+        '3':{
+            'AGOC-3A':[],
+            'Appluimonia':[],
+            'Chlorodinine':[],
+            'Methylosmolene':[],
+            'yes':0
+        },
+        '4':{
+            'AGOC-3A':[],
+            'Appluimonia':[],
+            'Chlorodinine':[],
+            'Methylosmolene':[],
+            'yes':0
+        },
+        '5':{
+            'AGOC-3A':[],
+            'Appluimonia':[],
+            'Chlorodinine':[],
+            'Methylosmolene':[],
+            'yes':0
+        },
+        '6':{
+            'AGOC-3A':[],
+            'Appluimonia':[],
+            'Chlorodinine':[],
+            'Methylosmolene':[],
+            'yes':0
+        },
+        '7':{
+            'AGOC-3A':[],
+            'Appluimonia':[],
+            'Chlorodinine':[],
+            'Methylosmolene':[],
+            'yes':0
+        },
+        '8':{
+            'AGOC-3A':[],
+            'Appluimonia':[],
+            'Chlorodinine':[],
+            'Methylosmolene':[],
+            'yes':0
+        },
+        '9':{
+            'AGOC-3A':[],
+            'Appluimonia':[],
+            'Chlorodinine':[],
+            'Methylosmolene':[],
+            'yes':0
+        }
+    };
+    var chemicals =[ 'AGOC-3A','Appluimonia','Chlorodinine','Methylosmolene'];
+    var monitors=['1','2','3','4','5','6','7','8','9'];
+
+    for(i=0;i<localRadial.length;i++)
+    {
+        for(const chemical of chemicals)
+        for(const monitor of monitors)
+        {
+            if(jsonRadial[monitor][chemical].includes(Number(localRadial[i][chemical+monitor])))
+                jsonRadial[monitor]['yes']=jsonRadial[monitor]['yes']+1;
+            else
+            jsonRadial[monitor][chemical].push(Number(localRadial[i][chemical+monitor]));    
+        }
+    }
+
+
     d3.select("#radialchart").selectAll("*").remove();
     var radial_svg;
     const width = 600, height = 450,
@@ -289,54 +376,54 @@ function drawRadialChart(startDate,endDate){
     localData=[
         {
             "monitor":"M1",
-            "reading":0
+            "reading":jsonRadial['1']['yes']
         },
         {
             "monitor":"M2",
-            "reading":0
+            "reading":jsonRadial['2']['yes']
         },
         {
             "monitor":"M3",
-            "reading":0
+            "reading":jsonRadial['3']['yes']
         },
         {
             "monitor":"M4",
-            "reading":0
+            "reading":jsonRadial['4']['yes']
         },
         {
             "monitor":"M5",
-            "reading":0
+            "reading":jsonRadial['5']['yes']
         },
         {
             "monitor":"M6",
-            "reading":0
+            "reading":jsonRadial['6']['yes']
         },
         {
             "monitor":"M7",
-            "reading":0
+            "reading":jsonRadial['7']['yes']
         },
         {
             "monitor":"M8",
-            "reading":0
+            "reading":jsonRadial['8']['yes']
         },
         {
             "monitor":"M9",
-            "reading":0
+            "reading":jsonRadial['9']['yes']
         }
     ]
 
-    for(i=0;i<radial.length;i++)
-    {
-    localData[0]['reading']  =localData[0]['reading'] +Number(radial[i]['M1']);
-    localData[1]['reading']  =localData[1]['reading'] +Number(radial[i]['M2']);
-    localData[2]['reading']  =localData[2]['reading'] +Number(radial[i]['M3']);
-    localData[3]['reading']  =localData[3]['reading'] +Number(radial[i]['M4']);
-    localData[4]['reading']  =localData[4]['reading'] +Number(radial[i]['M5']);
-    localData[5]['reading']  =localData[5]['reading'] +Number(radial[i]['M6']);
-    localData[6]['reading']  =localData[6]['reading'] +Number(radial[i]['M7']);
-    localData[7]['reading']  =localData[7]['reading'] +Number(radial[i]['M8']);
-    localData[8]['reading']  =localData[8]['reading'] +Number(radial[i]['M9']);
-    }
+//     for(i=0;i<radial.length;i++)
+//     {
+//     localData[0]['reading']  =localData[0]['reading'] +Number(radial[i]['M1']);
+//     localData[1]['reading']  =localData[1]['reading'] +Number(radial[i]['M2']);
+//     localData[2]['reading']  =localData[2]['reading'] +Number(radial[i]['M3']);
+//     localData[3]['reading']  =localData[3]['reading'] +Number(radial[i]['M4']);
+//     localData[4]['reading']  =localData[4]['reading'] +Number(radial[i]['M5']);
+//     localData[5]['reading']  =localData[5]['reading'] +Number(radial[i]['M6']);
+//     localData[6]['reading']  =localData[6]['reading'] +Number(radial[i]['M7']);
+//     localData[7]['reading']  =localData[7]['reading'] +Number(radial[i]['M8']);
+//     localData[8]['reading']  =localData[8]['reading'] +Number(radial[i]['M9']);
+//     }
 
     //Defining the scale and ticks
     let scale = d3.scaleLinear()

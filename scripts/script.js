@@ -1,6 +1,9 @@
 var globalData;
 
+var startDate;
+var endDate;
 var c10 = d3.scaleOrdinal(d3.schemeTableau10).domain(["AGOC-3A", "Appluimonia", "Chlorodinine", "Methylosmolene"]);
+var selectedSensor='All';
 
 function dateFormatter(dateToChange) {
     var arr = dateToChange.split(/-|\s|:/); // split string and create array.
@@ -27,8 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function drawPage() {
-    var startDate;
-    var endDate;
+
     var selectedDate = document.getElementById("months").value;
     if (selectedDate == 'April') {
         startDate = dateFormatter('2016-04-01 00:00:00');
@@ -43,12 +45,12 @@ function drawPage() {
         endDate = dateFormatter('2016-12-31 23:00:00')
     }
 
-    drawTimeline(startDate, endDate);
+    drawTimeline();
     //drawColumnChart("2016-04-01 05:00:00","2016-04-04 19:00:00");
 }
 
 
-function drawTimeline(startDate, endDate) {
+function drawTimeline() {
     const margin = {
         top: 10,
         right: 10,
@@ -58,8 +60,6 @@ function drawTimeline(startDate, endDate) {
     const width = 1400 - margin.left - margin.right;
     const height = 80 - margin.top - margin.bottom;
 
-    var startDate;
-    var endDate;
 
     d3.select("#timeline-container").selectAll("*").remove();
 
@@ -140,25 +140,25 @@ function drawTimeline(startDate, endDate) {
         startDate = rangeDate[0];
         endDate = rangeDate[1];
         updateDateTimePickers(startDate, endDate);
-        drawAllCharts(startDate, endDate);
+        drawAllCharts();
     }
 
-    drawAllCharts(startDate, endDate);
+    drawAllCharts();
 }
 
-function drawAllCharts(startDate, endDate) {
-    drawColumnChart(startDate, endDate);
-    drawRadialChart(startDate, endDate);
+function drawAllCharts() {
+    drawColumnChart();
+    drawRadialChart();
 }
 
 
-function drawColumnChart(startDate, endDate) {
+function drawColumnChart() {
 
     var columnSvg;
     const margin = {
-        top: 30,
+        top: 70,
         right: 30,
-        bottom: 40,
+        bottom: 70,
         left: 60
     };
     const columnChartWidth = 600 - margin.left - margin.right;
@@ -167,7 +167,8 @@ function drawColumnChart(startDate, endDate) {
     var maxY;
     var barPadding = 0.2;
 
-    var selected = 'All';
+    var selected = selectedSensor=='All'?'All':selectedSensor.slice(-1);
+    // console.log(selected);
 
     d3.select("#column-container").selectAll("*").remove();
     columnSvg = d3.select("#column-container").append("svg")
@@ -207,10 +208,10 @@ function drawColumnChart(startDate, endDate) {
         localData[3]['reading'] = localData[3]['reading'] + Number(localColumn[i]['Methylosmolene' + selected]);
     }
 
-    // localData[0]['reading'] = localData[0]['reading']/localColumn.length;
-    // localData[1]['reading'] = localData[1]['reading']/localColumn.length;
-    // localData[2]['reading'] = localData[2]['reading']/localColumn.length;
-    // localData[3]['reading'] = localData[3]['reading']/localColumn.length;
+    localData[0]['reading'] = localData[0]['reading']/localColumn.length;
+    localData[1]['reading'] = localData[1]['reading']/localColumn.length;
+    localData[2]['reading'] = localData[2]['reading']/localColumn.length;
+    localData[3]['reading'] = localData[3]['reading']/localColumn.length;
 
 
 
@@ -263,7 +264,7 @@ function drawColumnChart(startDate, endDate) {
 
     columnSvg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
+        .attr("y", 10 - margin.left)
         .attr("x", 0 - (columnChartHeight / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
@@ -273,12 +274,21 @@ function drawColumnChart(startDate, endDate) {
     columnSvg.append("text")
         .attr("transform",
             "translate(" + (columnChartWidth / 2) + " ," +
-            (columnChartHeight + margin.top + 3) + ")")
+            (columnChartHeight + margin.top-30) + ")")
         .style("text-anchor", "middle")
         .text("Chemicals");
+
+    columnSvg.append("text")
+        .attr("x", (columnChartWidth / 2))             
+        .attr("y", -15 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "15px") 
+        .style("text-decoration", "underline")  
+        .text(selectedSensor=='All'?'Average chemical reading from all the Sensors in the selected time frame':('Average chemical reading from Sensor '+selectedSensor.slice(-1)+' in the selected time frame'));
+
 }
 
-function drawRadialChart(startDate, endDate) {
+function drawRadialChart() {
 
     var localRadial = globalData.filter(function (d) {
         return d['RowLabels'] >= startDate && d['RowLabels'] <= endDate;

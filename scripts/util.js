@@ -3,7 +3,8 @@ function onSensorSelected(sensorSelected) {
     //{name: "Sensor3", location: [76,41]}
     // you shouldn't need the location. 
     //Use sensorSelected.name to get the name of the sensor selected and then you can trigger a filter/selection on your chart
-
+    selectedSensor=sensorSelected.name;
+    drawAllCharts();
 }
 
 function filterByDate(data, date) {

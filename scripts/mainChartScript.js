@@ -66,10 +66,16 @@ function drawSensors(data) {
     });
 
     svg.on('click', function (d, i) {
+
         svg.selectAll(".radarSensor")
             .transition().duration(50)
             .style("opacity", 1);
-    });
+            onSensorSelected({
+                'name':'All'
+            });
+    }
+  
+    );
 
 
 }

@@ -402,43 +402,52 @@ function drawRadialChart() {
     // });
 
     localData = [{
-            "monitor": "M1",
+            "monitor": "Sensor1",
+            "display_name": "S1",
             "reading": jsonRadial['1']['yes']
         },
         {
-            "monitor": "M2",
+            "monitor": "Sensor2",
+            "display_name": "S2",
             "reading": jsonRadial['2']['yes']
         },
         {
-            "monitor": "M3",
+            "monitor": "Sensor3",
+            "display_name": "S3",
             "reading": jsonRadial['3']['yes']
         },
         {
-            "monitor": "M4",
+            "monitor": "Sensor4",
+            "display_name": "S4",
             "reading": jsonRadial['4']['yes']
         },
         {
-            "monitor": "M5",
+            "monitor": "Sensor5",
+            "display_name": "S5",
             "reading": jsonRadial['5']['yes']
         },
         {
-            "monitor": "M6",
+            "monitor": "Sensor6",
+            "display_name": "S6",
             "reading": jsonRadial['6']['yes']
         },
         {
-            "monitor": "M7",
+            "monitor": "Sensor7",
+            "display_name": "S7",
             "reading": jsonRadial['7']['yes']
         },
         {
-            "monitor": "M8",
+            "monitor": "Sensor8",
+            "display_name": "S8",
             "reading": jsonRadial['8']['yes']
         },
         {
-            "monitor": "M9",
+            "monitor": "Sensor9",
+            "display_name": "S9",
             "reading": jsonRadial['9']['yes']
         }
     ]
-
+console.log(selectedSensor);
     //     for(i=0;i<radial.length;i++)
     //     {
     //     localData[0]['reading']  =localData[0]['reading'] +Number(radial[i]['M1']);
@@ -481,7 +490,7 @@ function drawRadialChart() {
     radialAxis.append('text')
         .attr('x', labelPadding)
         .attr('y', (d, i) => -getOuterRadius(i) + arcPadding + 7)
-        .text(d => d.monitor);
+        .text(d => d.display_name);
 
     let axialAxis = radial_svg.append('g')
         .attr('class', 'a axis')
@@ -506,11 +515,12 @@ function drawRadialChart() {
         .data(localData)
         .enter().append('path')
         .attr('class', 'arc')
-        .style('fill', (d, i) => c10(i))
+        .style('fill', (d, i) => sensorsColorScale(d.monitor))
+        .style('opacity',(d) => selectedSensor=='All'?1:(d.monitor==selectedSensor?1:0.3));
 
     arcs.transition()
-        .delay((d, i) => i * 200)
-        .duration(1000)
+        .delay((d, i) => i * 0)
+        .duration(0)
         .attrTween('d', arcTween);
 
     arcs.on('mousemove', showTooltip)

@@ -1,6 +1,11 @@
 var globalData;
 var radialData;
-
+var lineData;
+var date_list=[];
+var s1=[];
+var s2=[];
+var s3=[];
+var s4=[];
 var c10 = d3.scaleOrdinal(d3.schemeTableau10).domain(["AGOC-3A","Appluimonia","Chlorodinine","Methylosmolene"]);
 
 function dateFormatter(dateToChange)
@@ -14,10 +19,11 @@ function dateFormatter(dateToChange)
 document.addEventListener('DOMContentLoaded', function()
 {
     // Load all files before doing anything else
-    Promise.all([d3.csv('MC2Data/column_data.csv'), d3.csv('MC2Data/radial_chart_data_clean.csv')])
+    Promise.all([d3.csv('MC2Data/column_data.csv'), d3.csv('MC2Data/radial_chart_data_clean.csv'),d3.csv("/linechart/sensor_1_new.csv")])
             .then(function(values){
                 globalData=values[0];
                 radialData=values[1];
+                lineData=values[2];
                 globalData.map(function(data)
                 {
                     data['RowLabels']=dateFormatter(data['RowLabels']);
@@ -138,13 +144,14 @@ function drawTimeline(startDate,endDate)
         drawAllCharts(startDate,endDate);
       }
 
-      drawAllCharts(startDate,endDate);                
+    //   drawAllCharts(startDate,endDate);                
 }
 
 function drawAllCharts(startDate,endDate)
 {
     drawColumnChart(startDate,endDate);
     drawRadialChart(startDate,endDate);
+    drawLineChart(startDate,endDate,lineData);
 }
 
 
@@ -430,4 +437,140 @@ function drawRadialChart(startDate,endDate){
 
     
 
+}
+function convert(str) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+      hour=(String(date.getHours())).slice(-2)
+      minute=("0" + date.getMinutes()).slice(-2)
+      //second=("0" + date.getSeconds()).slice(-2)
+    return ([mnth,day,date.getFullYear()].join("/")+ " " +[hour,minute].join(":"));
+  }
+
+function drawLineChart(startDate,endDate,lineData)
+{  
+    // set the dimensions and margins of the graph
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+width = 960 - margin.left - margin.right,
+height = 500 - margin.top - margin.bottom;
+
+
+  // append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+// we are appending SVG first
+const lineSvg = d3.select("div#container").append("svg")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    //.style("padding", padding)
+    .style("margin", margin)
+    .classed("svg-content", true);
+
+      const timeConv = d3.timeParse("%m/%d/%Y %H:%M");
+      const dataset = lineData
+     console.log(dataset)
+     const linedata=[];
+      for(i=0;i<dataset.length;i++)
+      {
+        //   console.log(dataset[i])
+
+        if((Date.parse(dataset[i].date)>=Date.parse(convert(startDate))) && (Date.parse(dataset[i].date)<=Date.parse(convert(endDate))))
+        {
+            element={}
+            element.date=dataset[i].date;
+            element.Methylosmolene=dataset[i].Methylosmolene
+            element.Chlorodinine=dataset[i].Chlorodinine;
+            element.AGOC_3A=dataset[i].AGOC_3A;
+            element.Appluimonia=dataset[i].Appluimonia;
+            linedata.push(element);
+        }
+      }
+      linedata.then(function(data) {
+        var slices = data.columns.slice(1).map(function(id) {
+            return {
+                id: id,
+                values: data.map(function(d){
+                    return {
+                        date: timeConv(d.date),
+                        measurement: +d[id]
+                    };
+                })
+            };
+        });
+    
+    //----------------------------SCALES----------------------------//
+    const xScale = d3.scaleTime().range([0,width]);
+    const yScale = d3.scaleLinear().rangeRound([height, 0]);
+    xScale.domain(d3.extent(data, function(d){
+      console.log(timeConv(d.date));
+        return timeConv(d.date)}));
+    yScale.domain([(0), d3.max(slices, function(c) {
+        return d3.max(c.values, function(d) {
+            return d.measurement + 4; });
+            })
+        ]);
+    
+    //-----------------------------AXES-----------------------------//
+    const yaxis = d3.axisLeft()
+        .ticks((slices[0].values).length)
+        .scale(yScale);
+    
+    const xaxis = d3.axisBottom()
+        .ticks(d3.timeDay.every(1000))
+        .tickFormat(d3.timeFormat('%m/%d %H:%M'))
+        .scale(xScale);
+    
+    //----------------------------LINES-----------------------------//
+    const line = d3.line()
+        .x(function(d) { return xScale(d.date); })
+        .y(function(d) { return yScale(d.measurement); }); 
+    
+    let id = 0;
+    const ids = function () {
+        return "line-"+id++;
+    }  
+    //-------------------------2. DRAWING---------------------------//
+    //-----------------------------AXES-----------------------------//
+    lineSvg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xaxis);
+    
+    lineSvg.append("g")
+        .attr("class", "axis")
+        .call(yaxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("dy", ".75em")
+        .attr("y", 6)
+        .style("text-anchor", "end")
+        .text("Frequency");
+    
+    //----------------------------LINES-----------------------------//
+    const lines = lineSvg.selectAll("lines")
+        .data(slices)
+        .enter()
+        .append("g");
+    
+        lines.append("path")
+        .attr("class", ids)
+        .attr("d", function(d) { return line(d.values); });
+    
+        lines.append("text")
+        .attr("class","serie_label")
+        .datum(function(d) {
+            return {
+                id: d.id,
+                value: d.values[d.values.length - 1]}; })
+        .attr("transform", function(d) {
+                return "translate(" + (xScale(d.value.date) + 10)  
+                + "," + (yScale(d.value.measurement) + 5 ) + ")"; })
+        .attr("x", 5)
+        .text(function(d) { return ("Serie ") + d.id; });
+    
+    });
+
+    
 }

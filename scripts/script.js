@@ -635,33 +635,36 @@ function drawHeatMap(startDate,endDate){
               .attr("class", "hour bordered")
               .attr("width", gridSize)
               .attr("height", gridSize)
-            //   .transition().duration(500)
+              .on('mouseover',function(d,i){
+                console.log(d.value);
+            })
+              .transition().duration(500)
               .style("fill", function(d) { return colorScale((d.value)); });
 
           cards.select("title").text(function(d) { return (d.value); });
           
           cards.exit().remove();
 
-          // var legend = svg.selectAll(".legend")
-          //     .data([0].concat(colorScale.quantiles()), function(d) { return d; });
+          var legend = svg.selectAll(".legend")
+              .data([0].concat(colorScale.quantiles()), function(d) { return d; });
 
-          // legend.enter().append("g")
-          //     .attr("class", "legend");
+          legend.enter().append("g")
+              .attr("class", "legend");
 
-          // legend.append("rect")
-          //   .attr("x", function(d, i) { return legendElementWidth * i; })
-          //   .attr("y", height)
-          //   .attr("width", legendElementWidth)
-          //   .attr("height", gridSize / 2)
-          //   .style("fill", function(d, i) { return colors[i]; });
+          legend.append("rect")
+            .attr("x", function(d, i) { return legendElementWidth * i; })
+            .attr("y", height)
+            .attr("width", legendElementWidth)
+            .attr("height", gridSize / 2)
+            .style("fill", function(d, i) { return colors[i]; });
 
-          // legend.append("text")
-          //   .attr("class", "mono")
-          //   .text(function(d) { return "≥ " + Math.round(d); })
-          //   .attr("x", function(d, i) { return legendElementWidth * i; })
-          //   .attr("y", height + gridSize);
+          legend.append("text")
+            .attr("class", "mono")
+            .text(function(d) { return "≥ " + Math.round(d); })
+            .attr("x", function(d, i) { return legendElementWidth * i; })
+            .attr("y", height + gridSize);
 
-          // legend.exit().remove();
+        //   legend.exit().remove();
 
         });  
 }

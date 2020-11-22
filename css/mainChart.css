@@ -1,0 +1,75 @@
+.row {
+    margin: 1%;
+}
+
+.controls {
+    margin: 2%;
+}
+
+.factory {
+    fill: darkgray;
+    stroke: darkgray;
+    color: darkgray;
+    opacity: 0.75;
+}
+
+.factory:hover,
+.sensor:hover {
+    opacity: 1;
+}
+
+.tooltip-main {
+    position: absolute;
+    text-align: left;
+    padding: 2px;
+    font-size: 10px;
+    background: #E5E5E5;
+    border: 1px solid gray;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+
+.wind-glyph,
+line.wind-glyph {
+    fill: rgb(0, 80, 155);
+    stroke: none;
+    opacity: 1;
+
+}
+
+.wind-glyph.hide,
+line.wind-glyph.hide {
+    opacity: 0;
+}
+
+.compass {
+    opacity: 0.5;
+}
+
+
+.main-legend {
+    fill: rgb(255, 255, 255);
+    stroke: black;
+    stroke-width: 2;
+}
+
+.main-legend>circle {
+    stroke-width: 0;
+}
+
+.legend-title {
+    font-size: small;
+    text-anchor: middle;
+    fill: black;
+    stroke: none;
+    stroke-width: none;
+    font-weight: bold;
+}
+
+.legend-label {
+    font-size: xx-small;
+    fill: black;
+    stroke: none;
+    stroke-width: none;
+}

@@ -19,6 +19,7 @@
     <div id='timeline-container'></div>
     <div id='column-container'></div>
     <br>
+    &nbsp &nbsp &nbsp
     <label for="sensors" >Choose a sensor:</label>
     <select name="sensors" id="sensors" onchange="drawPage()">
       <option value="sensor_1" selected>Sensor 1</option>
@@ -30,6 +31,14 @@
       <option value="sensor_7">Sensor 7</option>
       <option value="sensor_8">Sensor 8</option>
       <option value="sensor_9">Sensor 9</option>
+    </select>
+    &nbsp &nbsp &nbsp
+    <label for="method" >Choose a reading type:</label>
+    <select name="method" id="method" onchange="drawPage()">
+      <option value="reading" selected>Original Reading</option>
+      <option value="cum_sum">Cumulative Sumation of the Reading</option>
+      <option value="square_root">Square Root of the Reading</option>
+      <option value="cube">Cube of the Reading</option>
     </select>
     <div id='line-container'></div>
     <div id='radialchart'></div>

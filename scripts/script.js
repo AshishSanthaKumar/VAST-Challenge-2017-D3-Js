@@ -23,11 +23,10 @@ document.addEventListener('DOMContentLoaded', function()
        .attr("class", "tooltip-donut")
        .style("opacity", 0);
     // Load all files before doing anything else
-    Promise.all([d3.csv('MC2Data/column_data.csv'), d3.csv('MC2Data/radial_chart_data_clean.csv'),d3.csv("/linechart/sensor_1_new_anamoly.csv")])
+    Promise.all([d3.csv('MC2Data/column_data.csv'), d3.csv('MC2Data/radial_chart_data_clean.csv')])
             .then(function(values){
                 globalData=values[0];
                 radialData=values[1];
-                lineData=values[2];
                 globalData.map(function(data)
                 {
                     data['RowLabels']=dateFormatter(data['RowLabels']);
@@ -63,12 +62,13 @@ function drawPage()
         endDate=dateFormatter('2016-12-31 23:00:00')
     }
     var selectedSensor=document.getElementById("sensors").value;
-    drawTimeline(startDate,endDate,selectedSensor);
+    var selectedMethod=document.getElementById("method").value;
+    drawTimeline(startDate,endDate,selectedSensor,selectedMethod);
     //drawColumnChart("2016-04-01 05:00:00","2016-04-04 19:00:00");
 }
 
 
-function drawTimeline(startDate,endDate,selectedSensor)
+function drawTimeline(startDate,endDate,selectedSensor,selectedMethod)
 {
     const margin = { top: 10, right: 10, bottom: 20, left: 25 };
     const width  = 1400 - margin.left - margin.right;
@@ -146,15 +146,15 @@ function drawTimeline(startDate,endDate,selectedSensor)
         startDate=rangeDate[0];
         endDate=rangeDate[1];
 
-        drawAllCharts(startDate,endDate,selectedSensor);
+        drawAllCharts(startDate,endDate,selectedSensor,selectedMethod);
       }
 
-    drawAllCharts(startDate,endDate,selectedSensor);                
+    drawAllCharts(startDate,endDate,selectedSensor,selectedMethod);                
 }
 
-function drawAllCharts(startDate,endDate,selectedSensor)
+function drawAllCharts(startDate,endDate,selectedSensor,selectedMethod)
 {
-    drawLineChart(startDate,endDate,selectedSensor);
+    drawLineChart(startDate,endDate,selectedSensor,selectedMethod);
     drawColumnChart(startDate,endDate);
     drawRadialChart(startDate,endDate);
     
@@ -454,7 +454,7 @@ function convert(str) {
     return ([mnth,day,date.getFullYear()].join("/")+ " " +[hour,minute].join(":"));
   }
 
-function drawLineChart(startDate,endDate,selectedSensor)
+function drawLineChart(startDate,endDate,selectedSensor,selectedMethod)
 {  
     // set the dimensions and margins of the graph
 var lineSvg;
@@ -519,7 +519,7 @@ var valueline4 = d3.line()
     .x(function(d) { return x(new Date(d.date)); })
     .y(function(d) { return y(d.Appluimonia); }); 
     
-     d3.csv("/linechart/"+ selectedSensor +"_new_anamoly.csv").then(function(data) {
+     d3.csv("/linechart/"+ selectedSensor +"_final.csv").then(function(data) {
         //  console.log(data)
        var new_data= [];
     
@@ -529,7 +529,9 @@ var valueline4 = d3.line()
         var element={};
         // console.log(timeConv(d.date));
         if((Date.parse(timeConv(d.date))>=Date.parse(convert(startDate))) && (Date.parse(timeConv(d.date))<=Date.parse(convert(endDate))))
-        {
+        {   
+          if(selectedMethod == "reading")
+          {
             element.date=d.date;
             element.Methylosmolene=+d.Methylosmolene;
             element.Appluimonia=+d.Appluimonia;
@@ -540,6 +542,46 @@ var valueline4 = d3.line()
             element.AGOC_anamoly = +d.AGOC_anamoly;
             element.Appluimonia_anamoly = +d.Appluimonia_anamoly;
             new_data.push(element);
+          }
+          else if(selectedMethod == "cum_sum")
+          {
+            element.date=d.date;
+            element.Methylosmolene=+d.Methylosmolene_cum_sum;
+            element.Appluimonia=+d.Appluimonia_cum_sum;
+            element.AGOC_3A=+d.AGOC_3A_cum_sum;
+            element.Chlorodinine=+d.Chlorodinine_cum_sum;
+            element.Chlorodinine_anamoly = +d.Chlorodinine_anamoly;
+            element.Methylosmolene_anamoly = +d.Methylosmolene_anamoly;
+            element.AGOC_anamoly = +d.AGOC_anamoly;
+            element.Appluimonia_anamoly = +d.Appluimonia_anamoly;
+            new_data.push(element);
+          }
+          else if(selectedMethod == "cube")
+          {
+            element.date=d.date;
+            element.Methylosmolene=+d.Methylosmolene_cube;
+            element.Appluimonia=+d.Appluimonia_cube;
+            element.AGOC_3A=+d.AGOC_3A_cube;
+            element.Chlorodinine=+d.Chlorodinine_cube;
+            element.Chlorodinine_anamoly = +d.Chlorodinine_anamoly;
+            element.Methylosmolene_anamoly = +d.Methylosmolene_anamoly;
+            element.AGOC_anamoly = +d.AGOC_anamoly;
+            element.Appluimonia_anamoly = +d.Appluimonia_anamoly;
+            new_data.push(element);
+          }
+          else if(selectedMethod == "square_root")
+          {
+            element.date=d.date;
+            element.Methylosmolene=+d.Methylosmolene_square_root;
+            element.Appluimonia=+d.Appluimonia_square_root;
+            element.AGOC_3A=+d.AGOC_3A_square_root;
+            element.Chlorodinine=+d.Chlorodinine_square_root;
+            element.Chlorodinine_anamoly = +d.Chlorodinine_anamoly;
+            element.Methylosmolene_anamoly = +d.Methylosmolene_anamoly;
+            element.AGOC_anamoly = +d.AGOC_anamoly;
+            element.Appluimonia_anamoly = +d.Appluimonia_anamoly;
+            new_data.push(element);
+          }
         }
         //console.log(startDate)
       });
@@ -576,9 +618,8 @@ else
 .attr("fill", "red")
 .attr("transform", "translate(50,10)")
 .attr("cx", function(d) { 
-  console.log(d.date); return x(new Date(d.date)); })
+ return x(new Date(d.date)); })
 .attr("cy", function(d) { 
-  console.log(d.Methylosmolene_anamoly)
   return y(d.Methylosmolene); });
 
 

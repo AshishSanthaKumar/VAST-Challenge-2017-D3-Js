@@ -13,6 +13,9 @@ function dateFormatter(dateToChange) {
 
 // This runs when the page is loaded
 document.addEventListener('DOMContentLoaded', function () {
+    div = d3.select("body").append("div")
+    .attr("class", "tooltip-map")
+    .style("opacity", 0);
     // Load all files before doing anything else
     Promise.all([d3.csv('MC2Data/column_formated.csv')])
         .then(function (values) {
@@ -146,9 +149,11 @@ function drawTimeline() {
     drawAllCharts();
 }
 
-function drawAllCharts() {
+function drawAllCharts()
+{
     drawColumnChart();
     drawRadialChart();
+    drawHeatMap();
 }
 
 
@@ -559,4 +564,136 @@ console.log(selectedSensor);
 
 
 
+}
+
+function drawHeatMap(){
+    // d3.select("#heatmap").selectAll("*").remove();
+    
+    console.log(startDate);
+    // sensorval = document.getElementById('sensor').value;
+    if(selectedSensor == 'All'){
+        sensorval = 1;
+    }
+    else{
+        sensorval = parseInt(selectedSensor[6]);
+    }
+    
+    console.log(sensorval);
+    var startdateString = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000 ))
+                    .toISOString()
+                    .split("T")[0];
+    console.log(startdateString);
+    var margin = { top: 50, right: 0, bottom: 100, left: 30 },
+          width = 960 - margin.left - margin.right,
+          height = 430 - margin.top - margin.bottom,
+          gridSize = Math.floor(width / 35),
+          legendElementWidth = gridSize*2,
+          buckets = 9,
+          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
+          days = ["AGOC-3A", "Appluimonia", "Chlorodinine", "Methylosmolene"],
+          times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
+          datasets = [`../MC2Data/sensor_${sensorval}_new.json`];
+
+          console.log(d3.schemeBlues);
+    d3.select("#heatmap").selectAll("*").remove();
+      var svg = d3.select("#heatmap").append("svg")
+          .attr("width", width + margin.left + margin.right +100)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + (margin.left + 100)  + "," + margin.top + ")");
+
+      var dayLabels = svg.selectAll(".dayLabel")
+          .data(days)
+          .enter().append("text")
+            .text(function (d) { return d; })
+            .attr("x", 0)
+            .attr("y", function (d, i) { return i * gridSize; })
+            .style("text-anchor", "end")
+            .attr("transform", "translate(-10," + gridSize / 1.5 + ")")
+            .attr("class", "dayLabel mono axis axis-workweek");
+
+      var timeLabels = svg.selectAll(".timeLabel")
+          .data(times)
+          .enter().append("text")
+            .text(function(d) { return d; })
+            .attr("x", function(d, i) { return i * gridSize; })
+            .attr("y", 0)
+            .style("font", "10px times")
+            .style("text-anchor", "middle")
+            .attr("transform", "translate(" + gridSize / 2 + ", -6)")
+            .attr("class", "timeLabel mono axis axis-worktime");
+
+      
+      d3.json(datasets[0]).then(
+
+        function(data) {
+
+          console.log(data);
+          var colorScale = d3.scaleQuantile()
+              .domain([0, buckets - 1, d3.max(data[startdateString], function (d) { return (d.value); })])
+              .range(colors);
+
+              console.log([0].concat(colorScale.quantiles()));
+          var cards = svg.selectAll(".hour")
+              .data(data[startdateString]);
+
+          cards.append("title");
+
+          cards.enter().append("rect")
+              .attr("x", function(d,i) { return ((d.hour) - 1) * gridSize; })
+              .attr("y", function(d) { return ((d.chemical) - 1) * gridSize; })
+              .attr("rx", 4)
+              .attr("ry", 4)
+              .attr("class", "hour bordered")
+              .attr("width", gridSize)
+              .attr("height", gridSize)
+              .on('mouseover',function(d,i){
+                div.transition()
+                .duration(50)
+                .style("opacity", 1);
+                div.html(`${d.value}`)
+                .style("left", (d3.event.pageX) + 10 + "px")
+                .style("top", (d3.event.pageY) + 10 + "px");
+            })
+            .on('mousemove',function(d,i){
+                div.transition()
+                .duration(50)
+                .style("opacity", 1);
+                div.html(`${d.value}`)
+                .style("left", (d3.event.pageX) + 10 + "px")
+                .style("top", (d3.event.pageY) + 10 + "px");
+            })
+            .on('mouseout',function(d){
+                div.transition()
+                     .duration(50)
+                     .style("opacity", 0);
+            })
+            //   .transition().duration(500)
+              .style("fill", function(d) { return colorScale((d.value)); });
+
+          cards.select("title").text(function(d) { return (d.value); });
+          
+          cards.exit().remove();
+
+        //   var legend = d3.select('#legendheatmap').selectAll(".legend")
+        //       .data([0].concat(colorScale.quantiles()));
+
+        //   legend.enter().append("rect")
+        //       .attr("class", "legend")
+
+        //       .attr("x", 100)
+        //       .attr("y", 200)
+        //       .attr("width", legendElementWidth)
+        //       .attr("height", gridSize / 2)
+        //       .style("fill", function(d, i) { return colors[i]; });
+
+        //   legend.append("text")
+        //     .attr("class", "mono")
+        //     .text(function(d) { return "≥ " + Math.round(d); })
+        //     .attr("x", function(d, i) { return legendElementWidth * i; })
+        //     .attr("y", height + gridSize);
+
+        //   legend.exit().remove();
+
+        });  
 }

@@ -116,3 +116,14 @@
   text.axis-worktime {
     fill: #000;
   }
+
+  div.tooltip-map {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 3px;
+    box-shadow: -3px 3px 15px #888;
+    color: white;
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+  

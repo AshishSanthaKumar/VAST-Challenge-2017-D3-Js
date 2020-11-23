@@ -32,10 +32,13 @@ function RadarChart(currSensor, data, color, location, config) {
 				.style("opacity", 1);
 
 			onSensorSelected(d3.select(this).data()[0]);
+			drawHeatmap(parseInt(d3.select(this).data()[0]['name'][6]));
+			
 
 		})
 		.on('mouseover', function (d, i) {
 			addPossibleSourceLine(d3.select(this))
+			
 		})
 		.on('mouseout', () => {
 			svg.selectAll(".possibleSource")

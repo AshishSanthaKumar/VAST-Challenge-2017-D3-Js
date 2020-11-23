@@ -2,7 +2,14 @@ var globalData;
 
 var startDate;
 var endDate;
-var c10 = d3.scaleOrdinal(d3.schemeTableau10).domain(["AGOC-3A", "Appluimonia", "Chlorodinine", "Methylosmolene"]);
+// var c10 = d3.scaleOrdinal(d3.schemePaired).domain(["AGOC-3A", "Test1","Appluimonia","Test", "Chlorodinine","Test2","Test3","Test4","Test5", "Methylosmolene"]);
+
+var chemicalColor={
+    'AGOC-3A':'#A6CEE3',
+    'Appluimonia':'#B2DF8A',
+    'Chlorodinine':'#FB9A99',
+    'Methylosmolene':'#6A3D9A'
+}
 var selectedSensor='All';
 
 function dateFormatter(dateToChange) {
@@ -248,7 +255,7 @@ function drawColumnChart() {
             return x(d.chemical) + 40;
         })
         .attr("fill", function (d) {
-            return c10(d.chemical);
+            return chemicalColor[d.chemical];
         })
         .attr("width", x.bandwidth() - 75)
         .attr("y", function (d) {

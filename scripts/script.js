@@ -135,7 +135,8 @@ function drawTimeline() {
     timeline.append("g")
         .attr("class", "brush")
         .call(brush)
-        .call(brush.move, x.range());
+        .call(brush.move,[300,350]);
+
 
     function brushed() {
         var selection = d3.event.selection;

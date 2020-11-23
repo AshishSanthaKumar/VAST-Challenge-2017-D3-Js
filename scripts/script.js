@@ -402,9 +402,7 @@ function drawRadialChart() {
         .append('g')
         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-    // var radial= radialData.filter(function(d){
-    //     return d['Date']>=startDate && d['Date']<=endDate;
-    // });
+
 
     localData = [{
             "monitor": "Sensor1",
@@ -452,19 +450,7 @@ function drawRadialChart() {
             "reading": jsonRadial['9']['yes']
         }
     ]
-console.log(selectedSensor);
-    //     for(i=0;i<radial.length;i++)
-    //     {
-    //     localData[0]['reading']  =localData[0]['reading'] +Number(radial[i]['M1']);
-    //     localData[1]['reading']  =localData[1]['reading'] +Number(radial[i]['M2']);
-    //     localData[2]['reading']  =localData[2]['reading'] +Number(radial[i]['M3']);
-    //     localData[3]['reading']  =localData[3]['reading'] +Number(radial[i]['M4']);
-    //     localData[4]['reading']  =localData[4]['reading'] +Number(radial[i]['M5']);
-    //     localData[5]['reading']  =localData[5]['reading'] +Number(radial[i]['M6']);
-    //     localData[6]['reading']  =localData[6]['reading'] +Number(radial[i]['M7']);
-    //     localData[7]['reading']  =localData[7]['reading'] +Number(radial[i]['M8']);
-    //     localData[8]['reading']  =localData[8]['reading'] +Number(radial[i]['M9']);
-    //     }
+
 
     //Defining the scale and ticks
     let scale = d3.scaleLinear()
@@ -538,14 +524,19 @@ console.log(selectedSensor);
     }
 
     function showTooltip(d) {
-        tooltip.style('left', (d3.event.pageX + 10) + 'px')
-            .style('top', (d3.event.pageY - 25) + 'px')
-            .style('display', 'inline-block')
-            .html(d.reading);
+        div.transition()
+                .duration(50)
+                .style("opacity", 1);
+        div.html(`${d.reading}`)
+                .style("left", (d3.event.pageX) + 10 + "px")
+                .style("top", (d3.event.pageY) + 10 + "px");
+
     }
 
     function hideTooltip() {
-        tooltip.style('display', 'none');
+        div.transition()
+                     .duration(50)
+                     .style("opacity", 0);
     }
 
     function rad2deg(angle) {
@@ -569,7 +560,7 @@ console.log(selectedSensor);
 function drawHeatMap(){
     // d3.select("#heatmap").selectAll("*").remove();
     
-    console.log(startDate);
+    
     // sensorval = document.getElementById('sensor').value;
     if(selectedSensor == 'All'){
         sensorval = 1;
@@ -578,11 +569,11 @@ function drawHeatMap(){
         sensorval = parseInt(selectedSensor[6]);
     }
     
-    console.log(sensorval);
+   
     var startdateString = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000 ))
                     .toISOString()
                     .split("T")[0];
-    console.log(startdateString);
+    
     var margin = { top: 50, right: 0, bottom: 100, left: 30 },
           width = 960 - margin.left - margin.right,
           height = 430 - margin.top - margin.bottom,
@@ -594,7 +585,7 @@ function drawHeatMap(){
           times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
           datasets = [`../MC2Data/sensor_${sensorval}_new.json`];
 
-          console.log(d3.schemeBlues);
+          
     d3.select("#heatmap").selectAll("*").remove();
       var svg = d3.select("#heatmap").append("svg")
           .attr("width", width + margin.left + margin.right +100)
@@ -628,12 +619,12 @@ function drawHeatMap(){
 
         function(data) {
 
-          console.log(data);
+     
           var colorScale = d3.scaleQuantile()
               .domain([0, buckets - 1, d3.max(data[startdateString], function (d) { return (d.value); })])
               .range(colors);
 
-              console.log([0].concat(colorScale.quantiles()));
+              
           var cards = svg.selectAll(".hour")
               .data(data[startdateString]);
 

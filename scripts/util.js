@@ -102,8 +102,6 @@ function updateDateTimePickers(startDate, endDate) {
         max: endTimeOnly
     }).change();
 
-
-
 }
 
 function formatDate(date) {

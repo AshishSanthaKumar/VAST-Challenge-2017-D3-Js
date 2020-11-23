@@ -153,7 +153,7 @@ function drawAllCharts()
 {
     drawColumnChart();
     drawRadialChart();
-    drawHeatMap(1);
+    drawHeatMap();
 }
 
 
@@ -566,11 +566,18 @@ console.log(selectedSensor);
 
 }
 
-function drawHeatMap(sensorval){
+function drawHeatMap(){
     // d3.select("#heatmap").selectAll("*").remove();
     
     console.log(startDate);
-    sensorval = document.getElementById('sensor').value;
+    // sensorval = document.getElementById('sensor').value;
+    if(selectedSensor == 'All'){
+        sensorval = 1;
+    }
+    else{
+        sensorval = parseInt(selectedSensor[6]);
+    }
+    
     console.log(sensorval);
     var startdateString = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000 ))
                     .toISOString()
@@ -585,7 +592,7 @@ function drawHeatMap(sensorval){
           colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
           days = ["AGOC-3A", "Appluimonia", "Chlorodinine", "Methylosmolene"],
           times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
-          datasets = [`../MC2Data/sensor_${parseInt(sensorval)}_new.json`];
+          datasets = [`../MC2Data/sensor_${sensorval}_new.json`];
 
           console.log(d3.schemeBlues);
     d3.select("#heatmap").selectAll("*").remove();

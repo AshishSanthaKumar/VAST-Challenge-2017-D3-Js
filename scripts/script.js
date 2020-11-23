@@ -18,8 +18,12 @@ function dateFormatter(dateToChange)
 // This runs when the page is loaded
 document.addEventListener('DOMContentLoaded', function()
 {
+
+  div = d3.select("body").append("div")
+       .attr("class", "tooltip-donut")
+       .style("opacity", 0);
     // Load all files before doing anything else
-    Promise.all([d3.csv('MC2Data/column_data.csv'), d3.csv('MC2Data/radial_chart_data_clean.csv'),d3.csv("/linechart/sensor_1_new.csv")])
+    Promise.all([d3.csv('MC2Data/column_data.csv'), d3.csv('MC2Data/radial_chart_data_clean.csv'),d3.csv("/linechart/sensor_1_new_anamoly.csv")])
             .then(function(values){
                 globalData=values[0];
                 radialData=values[1];
@@ -34,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function()
                 })
                 drawPage();
             })
+            
 })
 
 
@@ -57,13 +62,13 @@ function drawPage()
         startDate=dateFormatter('2016-12-01 00:00:00');
         endDate=dateFormatter('2016-12-31 23:00:00')
     }
-  
-    drawTimeline(startDate,endDate);
+    var selectedSensor=document.getElementById("sensors").value;
+    drawTimeline(startDate,endDate,selectedSensor);
     //drawColumnChart("2016-04-01 05:00:00","2016-04-04 19:00:00");
 }
 
 
-function drawTimeline(startDate,endDate)
+function drawTimeline(startDate,endDate,selectedSensor)
 {
     const margin = { top: 10, right: 10, bottom: 20, left: 25 };
     const width  = 1400 - margin.left - margin.right;
@@ -141,15 +146,15 @@ function drawTimeline(startDate,endDate)
         startDate=rangeDate[0];
         endDate=rangeDate[1];
 
-        drawAllCharts(startDate,endDate);
+        drawAllCharts(startDate,endDate,selectedSensor);
       }
 
-    drawAllCharts(startDate,endDate);                
+    drawAllCharts(startDate,endDate,selectedSensor);                
 }
 
-function drawAllCharts(startDate,endDate)
+function drawAllCharts(startDate,endDate,selectedSensor)
 {
-    drawLineChart(startDate,endDate,lineData);
+    drawLineChart(startDate,endDate,selectedSensor);
     drawColumnChart(startDate,endDate);
     drawRadialChart(startDate,endDate);
     
@@ -449,9 +454,8 @@ function convert(str) {
     return ([mnth,day,date.getFullYear()].join("/")+ " " +[hour,minute].join(":"));
   }
 
-function drawLineChart(startDate,endDate)
+function drawLineChart(startDate,endDate,selectedSensor)
 {  
-    
     // set the dimensions and margins of the graph
 var lineSvg;
 var margin = {top: 30, right: 20, bottom: 50, left: 50},
@@ -473,10 +477,11 @@ lineSvg = d3.select("#line-container").append("svg")
     .classed("svg-content", true);
 
       // Define date parser
-var timeConv = d3.timeParse("%-m/%-d/%Y %H:%M");
-         
+var timeConv = d3.timeParse("%Y-%m-%d %H:%M:%S");
+
      // set the ranges
 var x = d3.scaleTime().range([0, width/2]);
+var bisect = d3.bisector(function(d) { return d.x; }).left;
 var y = d3.scaleLinear().rangeRound([height/2, 0]);
 
 // define the 1st line
@@ -484,7 +489,8 @@ var valueline1 = d3.line()
 // .defined(d => !isNaN(d.Methylosmolene))
 // .x(d => x(d.date))
 // .y(d => y(d.Methylosmolene));
-    .x(function(d) { return x( new Date(d.date)); })
+    .x(function(d) { 
+      return x( new Date(d.date)); })
     .y(function(d) { return y(d.Methylosmolene); });
 
 // define the 2nd line
@@ -512,14 +518,16 @@ var valueline4 = d3.line()
     // .y(d => y(d.Appluimonia)); 
     .x(function(d) { return x(new Date(d.date)); })
     .y(function(d) { return y(d.Appluimonia); }); 
-    var csv_
-     d3.csv("/linechart/sensor_1_new.csv").then(function(data) {
+    
+     d3.csv("/linechart/"+ selectedSensor +"_new_anamoly.csv").then(function(data) {
         //  console.log(data)
        var new_data= [];
+    
       data.forEach(function(d)
       {
         //console.log(Date.parse(timeConv(d.date)));
         var element={};
+        // console.log(timeConv(d.date));
         if((Date.parse(timeConv(d.date))>=Date.parse(convert(startDate))) && (Date.parse(timeConv(d.date))<=Date.parse(convert(endDate))))
         {
             element.date=d.date;
@@ -527,6 +535,11 @@ var valueline4 = d3.line()
             element.Appluimonia=+d.Appluimonia;
             element.AGOC_3A=+d.AGOC_3A
             element.Chlorodinine=+d.Chlorodinine;
+            element.Chlorodinine_anamoly = +d.Chlorodinine_anamoly;
+            element.Methylosmolene_anamoly = +d.Methylosmolene_anamoly;
+            element.AGOC_anamoly = +d.AGOC_anamoly;
+            element.Chlorodinine_anamoly = +d.Chlorodinine_anamoly;
+            // console.log(d.date);
             // d.date=Date.parse(timeConv(d.date));
             // d.Methylosmolene=+d['Methylosmolene'];
             // d.Chlorodinine=+d['Chlorodinine'];
@@ -544,18 +557,93 @@ var valueline4 = d3.line()
 // 	  return Math.max(d.Methylosmolene,d.Chlorodinine,d.AGOC_3A,d.Appluimonia); })]);
 //console.log(data);
 
+lineSvg.selectAll("dot")
+.data(new_data)
+.enter().append("circle")
+.attr("r", 3.5)
+.attr("fill", "red")
+.attr("transform", "translate(50,10)")
+// .x(function(d) { return x(new Date(d.date)); })
+// .y(function(d) { return y(d.Appluimonia); })
+.attr("cx", function(d) { return x(d.date); })
+.attr("cy", function(d) { if(d.Methylosmolene_anamoly == 1){return y(d.Methylosmolene); }});
+
   //Add the 1st valueline path.
   lineSvg.append("path")
       .datum(new_data)
       .attr("class", "line")
-      .style("stroke", "red")
+      .style("stroke", "orange")
+      .attr("stroke-width", 0.1)
       .attr("transform", "translate(50,10)")
       .attr("d", valueline1);
+
+      // lineSvg
+      // .append("g")
+      // .selectAll("dot")
+      // .data(new_data)
+      // .enter()
+      // .append("circle")
+      //   .attr("cx", function(d) { return x(d.date) } )
+      //   .attr("cy", function(d) { return y(d.Methylosmolene) } )
+      //   .attr("r", 5)
+      //   .attr("fill", "#69b3a2")
+
+
+      var bisect = d3.bisector(function (d) { return d.date; }).left;
+
+      var focus = lineSvg
+      .append('g')
+      .append('circle')
+      .attr("transform", "translate(50,10)")
+          .style("fill", "none")
+          .attr("stroke", "black")
+          .attr('r', 10)
+          .style("opacity", 0);
+      
+      lineSvg
+      .append('rect')
+          .style("fill", "none")
+          .style("pointer-events", "all")
+          .attr('width', width/2)
+          .attr('height', height/2)
+          .attr("transform", "translate(50,10)")
+          .on('mouseover', mouseover)
+          .on('mousemove', mousemove)
+          .on('mouseout', mouseout);
+      
+      function mouseover() {
+      focus.style("opacity", 1)
+      }
+      
+      function mousemove() {
+      var x0 = x.invert(d3.mouse(this)[0]);
+      var i = bisect(new_data, x0, 1);
+      selectedData = new_data[i];
+      // console.log(selectedData)
+      focus
+        .attr("cx", x(selectedData.date))
+        .attr("cy", y(selectedData.Methylosmolene));
+      
+      div.transition().duration(50).style("opacity", 1);
+      
+      div.html("Year: "+ selectedData.date +  "<br /> GDP: " + selectedData.Methylosmolene + "</b>")
+                    .style("left", (d3.event.pageX) + 15 + "px")
+                    .style("top", (d3.event.pageY) - 45 + "px");
+      
+      }
+      function mouseout() {
+      
+      focus.style("opacity", 0);
+      div.transition().duration('50').style("opacity", 0);
+      }
+
+      
 
   // Add the 2nd valueline path.
   lineSvg.append("path")
       .datum(new_data)
       .attr("class", "line")
+      .attr("stroke-width", 0.1)
       .style("stroke", "yellow")
       .attr("transform", `translate(${105 + width/2},10)`)
       .attr("d", valueline2);
@@ -565,6 +653,7 @@ var valueline4 = d3.line()
       .datum(new_data)
       .attr("class", "line")
       .style("stroke", "blue")
+      .attr("stroke-width", 0.1)
       .attr("transform", `translate(50,${height/2 + 80})`)
       .attr("d", valueline3);
 
@@ -573,6 +662,7 @@ var valueline4 = d3.line()
       .datum(new_data)
       .attr("class", "line")
       .style("stroke", "green")
+      .attr("stroke-width", 1.5)
       .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
       .attr("d", valueline4);
 

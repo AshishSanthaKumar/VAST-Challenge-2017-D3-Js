@@ -142,7 +142,7 @@ function drawTimeline() {
     timeline.append("g")
         .attr("class", "brush")
         .call(brush)
-        .call(brush.move,[100,700]);
+        .call(brush.move,[91,350]);
 
 
     function brushed() {

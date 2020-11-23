@@ -144,14 +144,15 @@ function drawTimeline(startDate,endDate)
         drawAllCharts(startDate,endDate);
       }
 
-    //   drawAllCharts(startDate,endDate);                
+    drawAllCharts(startDate,endDate);                
 }
 
 function drawAllCharts(startDate,endDate)
 {
+    drawLineChart(startDate,endDate,lineData);
     drawColumnChart(startDate,endDate);
     drawRadialChart(startDate,endDate);
-    drawLineChart(startDate,endDate,lineData);
+    
 }
 
 
@@ -448,129 +449,208 @@ function convert(str) {
     return ([mnth,day,date.getFullYear()].join("/")+ " " +[hour,minute].join(":"));
   }
 
-function drawLineChart(startDate,endDate,lineData)
+function drawLineChart(startDate,endDate)
 {  
+    
     // set the dimensions and margins of the graph
-var margin = {top: 20, right: 20, bottom: 30, left: 50},
+var lineSvg;
+var margin = {top: 30, right: 20, bottom: 50, left: 50},
 width = 960 - margin.left - margin.right,
 height = 500 - margin.top - margin.bottom;
 
 
+d3.select("#line-container").selectAll("*").remove();
   // append the svg obgect to the body of the page
 // appends a 'group' element to 'svg'
 // moves the 'group' element to the top left margin
 // we are appending SVG first
-const lineSvg = d3.select("div#container").append("svg")
+lineSvg = d3.select("#line-container").append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", width + margin.left + margin.right+50)
+    .attr("height", height + margin.top + margin.bottom+50)
     //.style("padding", padding)
     .style("margin", margin)
     .classed("svg-content", true);
 
-      const timeConv = d3.timeParse("%m/%d/%Y %H:%M");
-      const dataset = lineData
-     console.log(dataset)
-     const linedata=[];
-      for(i=0;i<dataset.length;i++)
-      {
-        //   console.log(dataset[i])
+      // Define date parser
+var timeConv = d3.timeParse("%-m/%-d/%Y %H:%M");
+         
+     // set the ranges
+var x = d3.scaleTime().range([0, width/2]);
+var y = d3.scaleLinear().rangeRound([height/2, 0]);
 
-        if((Date.parse(dataset[i].date)>=Date.parse(convert(startDate))) && (Date.parse(dataset[i].date)<=Date.parse(convert(endDate))))
+// define the 1st line
+var valueline1 = d3.line()
+// .defined(d => !isNaN(d.Methylosmolene))
+// .x(d => x(d.date))
+// .y(d => y(d.Methylosmolene));
+    .x(function(d) { return x( new Date(d.date)); })
+    .y(function(d) { return y(d.Methylosmolene); });
+
+// define the 2nd line
+var valueline2 = d3.line()
+    // .defined(d => !isNaN(d.Chlorodinine))
+    // .x(d => x(d.date))
+    // .y(d => y(d.Chlorodinine));
+
+    .x(function(d) { return x( new Date(d.date)); })
+    .y(function(d) { return y(d.Chlorodinine); }); 
+      
+// define the 3rd line
+var valueline3 = d3.line()
+    // .defined(d => !isNaN(d.AGOC_3A))
+    // .x(d => x(d.date))
+    // .y(d => y(d.AGOC_3A));  
+    .x(function(d) { return x( new Date(d.date)); })
+    .y(function(d) { return y(d.AGOC_3A); });
+
+// define the 4th line
+var valueline4 = d3.line()
+
+    // .defined(d => !isNaN(d.Appluimonia))
+    // .x(d => { x( new Date(d.date.split(" ")[0]))})
+    // .y(d => y(d.Appluimonia)); 
+    .x(function(d) { return x(new Date(d.date)); })
+    .y(function(d) { return y(d.Appluimonia); }); 
+    var csv_
+     d3.csv("/linechart/sensor_1_new.csv").then(function(data) {
+        //  console.log(data)
+       var new_data= [];
+      data.forEach(function(d)
+      {
+        //console.log(Date.parse(timeConv(d.date)));
+        var element={};
+        if((Date.parse(timeConv(d.date))>=Date.parse(convert(startDate))) && (Date.parse(timeConv(d.date))<=Date.parse(convert(endDate))))
         {
-            element={}
-            element.date=dataset[i].date;
-            element.Methylosmolene=dataset[i].Methylosmolene
-            element.Chlorodinine=dataset[i].Chlorodinine;
-            element.AGOC_3A=dataset[i].AGOC_3A;
-            element.Appluimonia=dataset[i].Appluimonia;
-            linedata.push(element);
+            element.date=d.date;
+            element.Methylosmolene=+d.Methylosmolene;
+            element.Appluimonia=+d.Appluimonia;
+            element.AGOC_3A=+d.AGOC_3A
+            element.Chlorodinine=+d.Chlorodinine;
+            // d.date=Date.parse(timeConv(d.date));
+            // d.Methylosmolene=+d['Methylosmolene'];
+            // d.Chlorodinine=+d['Chlorodinine'];
+            // d.AGOC_3A=+d['AGOC_3A'];
+            // d.Appluimonia=+d['Appluimonia'];
+             new_data.push(element);
         }
-      }
-      linedata.then(function(data) {
-        var slices = data.columns.slice(1).map(function(id) {
-            return {
-                id: id,
-                values: data.map(function(d){
-                    return {
-                        date: timeConv(d.date),
-                        measurement: +d[id]
-                    };
-                })
-            };
-        });
-    
-    //----------------------------SCALES----------------------------//
-    const xScale = d3.scaleTime().range([0,width]);
-    const yScale = d3.scaleLinear().rangeRound([height, 0]);
-    xScale.domain(d3.extent(data, function(d){
-      console.log(timeConv(d.date));
-        return timeConv(d.date)}));
-    yScale.domain([(0), d3.max(slices, function(c) {
-        return d3.max(c.values, function(d) {
-            return d.measurement + 4; });
-            })
-        ]);
-    
-    //-----------------------------AXES-----------------------------//
-    const yaxis = d3.axisLeft()
-        .ticks((slices[0].values).length)
-        .scale(yScale);
-    
-    const xaxis = d3.axisBottom()
-        .ticks(d3.timeDay.every(1000))
-        .tickFormat(d3.timeFormat('%m/%d %H:%M'))
-        .scale(xScale);
-    
-    //----------------------------LINES-----------------------------//
-    const line = d3.line()
-        .x(function(d) { return xScale(d.date); })
-        .y(function(d) { return yScale(d.measurement); }); 
-    
-    let id = 0;
-    const ids = function () {
-        return "line-"+id++;
-    }  
-    //-------------------------2. DRAWING---------------------------//
-    //-----------------------------AXES-----------------------------//
-    lineSvg.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xaxis);
-    
-    lineSvg.append("g")
-        .attr("class", "axis")
-        .call(yaxis)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("dy", ".75em")
-        .attr("y", 6)
-        .style("text-anchor", "end")
-        .text("Frequency");
-    
-    //----------------------------LINES-----------------------------//
-    const lines = lineSvg.selectAll("lines")
-        .data(slices)
-        .enter()
-        .append("g");
-    
-        lines.append("path")
-        .attr("class", ids)
-        .attr("d", function(d) { return line(d.values); });
-    
-        lines.append("text")
-        .attr("class","serie_label")
-        .datum(function(d) {
-            return {
-                id: d.id,
-                value: d.values[d.values.length - 1]}; })
-        .attr("transform", function(d) {
-                return "translate(" + (xScale(d.value.date) + 10)  
-                + "," + (yScale(d.value.measurement) + 5 ) + ")"; })
-        .attr("x", 5)
-        .text(function(d) { return ("Serie ") + d.id; });
+        //console.log(startDate)
+      });
+      //console.log(new_data);
+      // Scale the range of the data
+  x.domain(d3.extent(new_data, function(d) { return new Date(d.date); })).clamp(true);
+  y.domain([0,3]).clamp(true);
+//   y.domain([0, d3.max(data, function(d) {
+// 	  return Math.max(d.Methylosmolene,d.Chlorodinine,d.AGOC_3A,d.Appluimonia); })]);
+//console.log(data);
+
+  //Add the 1st valueline path.
+  lineSvg.append("path")
+      .datum(new_data)
+      .attr("class", "line")
+      .style("stroke", "red")
+      .attr("transform", "translate(50,10)")
+      .attr("d", valueline1);
+
+  // Add the 2nd valueline path.
+  lineSvg.append("path")
+      .datum(new_data)
+      .attr("class", "line")
+      .style("stroke", "yellow")
+      .attr("transform", `translate(${105 + width/2},10)`)
+      .attr("d", valueline2);
+
+  // Add the 3rd valueline path.
+  lineSvg.append("path")
+      .datum(new_data)
+      .attr("class", "line")
+      .style("stroke", "blue")
+      .attr("transform", `translate(50,${height/2 + 80})`)
+      .attr("d", valueline3);
+
+  // Add the 4th valueline path.
+  lineSvg.append("path")
+      .datum(new_data)
+      .attr("class", "line")
+      .style("stroke", "green")
+      .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
+      .attr("d", valueline4);
+
+  
+// Add the 1st X Axis
+lineSvg.append("g")
+.attr("transform", `translate(50, 220)`)
+
+.call(d3.axisBottom(x)
+.ticks(d3.timeDay.every(2))
+.tickFormat(d3.timeFormat('%m/%d %H:%M')))
+.selectAll("text")	
+  .style("text-anchor", "end")
+  .attr("dx", "-.8em")
+  .attr("dy", ".15em")
+  .attr("transform", "rotate(-45)");
+
+ // Add the 1st Y Axis
+  lineSvg.append("g")
+      .call(d3.axisLeft(y))
+      .attr("transform", "translate(50,10)")
+
+// Add the 2nd X Axis
+lineSvg.append("g")
+.attr("transform", `translate(550, 220)`)
+
+.call(d3.axisBottom(x)
+.ticks(d3.timeDay.every(2))
+.tickFormat(d3.timeFormat('%m/%d %H:%M')))
+.selectAll("text")	
+  .style("text-anchor", "end")
+  .attr("dx", "-.8em")
+  .attr("dy", ".15em")
+  .attr("transform", "rotate(-45)");
+
+// Add the 2nd Y Axis
+lineSvg.append("g")
+.call(d3.axisLeft(y))
+.attr("transform", "translate(550,10)");
+  
+// Add the 3rd X Axis
+lineSvg.append("g")
+.attr("transform", `translate(50, ${height + 80})`)
+
+.call(d3.axisBottom(x)
+.ticks(d3.timeDay.every(2))
+.tickFormat(d3.timeFormat('%m/%d %H:%M')))
+.selectAll("text")	
+  .style("text-anchor", "end")
+  .attr("dx", "-.8em")
+  .attr("dy", ".15em")
+  .attr("transform", "rotate(-45)");
+
+// Add the 3rd  Y Axis
+  lineSvg.append("g")
+      .call(d3.axisLeft(y))
+      .attr("transform", "translate(50,290)");
+
+// Add the 4th X Axis
+lineSvg.append("g")
+.attr("transform", `translate(550, 500)`)
+
+.call(d3.axisBottom(x)
+.ticks(d3.timeDay.every(2))
+.tickFormat(d3.timeFormat('%m/%d %H:%M')))
+.selectAll("text")	
+  .style("text-anchor", "end")
+  .attr("dx", "-.8em")
+  .attr("dy", ".15em")
+  .attr("transform", "rotate(-45)");
+
+// Add the 4th  Y Axis
+lineSvg.append("g")
+.call(d3.axisLeft(y))
+.attr("transform", "translate(550,290)");
     
     });
 
+ 
     
 }

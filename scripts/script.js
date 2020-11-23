@@ -538,35 +538,19 @@ var valueline4 = d3.line()
             element.Chlorodinine_anamoly = +d.Chlorodinine_anamoly;
             element.Methylosmolene_anamoly = +d.Methylosmolene_anamoly;
             element.AGOC_anamoly = +d.AGOC_anamoly;
-            element.Chlorodinine_anamoly = +d.Chlorodinine_anamoly;
-            // console.log(d.date);
-            // d.date=Date.parse(timeConv(d.date));
-            // d.Methylosmolene=+d['Methylosmolene'];
-            // d.Chlorodinine=+d['Chlorodinine'];
-            // d.AGOC_3A=+d['AGOC_3A'];
-            // d.Appluimonia=+d['Appluimonia'];
-             new_data.push(element);
+            element.Appluimonia_anamoly = +d.Appluimonia_anamoly;
+            new_data.push(element);
         }
         //console.log(startDate)
       });
       //console.log(new_data);
       // Scale the range of the data
   x.domain(d3.extent(new_data, function(d) { return new Date(d.date); })).clamp(true);
-  y.domain([0,3]).clamp(true);
-//   y.domain([0, d3.max(data, function(d) {
-// 	  return Math.max(d.Methylosmolene,d.Chlorodinine,d.AGOC_3A,d.Appluimonia); })]);
+  // y.domain([0,]).clamp(true);
+  y.domain([0, d3.max(new_data, function(d) {
+	  return Math.max(d.Methylosmolene,d.Chlorodinine,d.AGOC_3A,d.Appluimonia); })]);
 //console.log(data);
 
-lineSvg.selectAll("dot")
-.data(new_data)
-.enter().append("circle")
-.attr("r", 3.5)
-.attr("fill", "red")
-.attr("transform", "translate(50,10)")
-// .x(function(d) { return x(new Date(d.date)); })
-// .y(function(d) { return y(d.Appluimonia); })
-.attr("cx", function(d) { return x(d.date); })
-.attr("cy", function(d) { if(d.Methylosmolene_anamoly == 1){return y(d.Methylosmolene); }});
 
   //Add the 1st valueline path.
   lineSvg.append("path")
@@ -577,65 +561,74 @@ lineSvg.selectAll("dot")
       .attr("transform", "translate(50,10)")
       .attr("d", valueline1);
 
+      lineSvg.selectAll("dot")
+.data(new_data)
+
+.enter().append("circle")
+.attr("r", function(d)
+{
+  if(d.Methylosmolene_anamoly==1)
+  {return 3;}
+else
+{return 0;
+}
+})
+.attr("fill", "red")
+.attr("transform", "translate(50,10)")
+.attr("cx", function(d) { 
+  console.log(d.date); return x(new Date(d.date)); })
+.attr("cy", function(d) { 
+  console.log(d.Methylosmolene_anamoly)
+  return y(d.Methylosmolene); });
+
+
+      // var bisect = d3.bisector(function (d) { return d.date; }).left;
+
+      // var focus = lineSvg
+      // .append('g')
+      // .append('circle')
+      // .attr("transform", "translate(50,10)")
+      //     .style("fill", "none")
+      //     .attr("stroke", "black")
+      //     .attr('r', 10)
+      //     .style("opacity", 0);
+      
       // lineSvg
-      // .append("g")
-      // .selectAll("dot")
-      // .data(new_data)
-      // .enter()
-      // .append("circle")
-      //   .attr("cx", function(d) { return x(d.date) } )
-      //   .attr("cy", function(d) { return y(d.Methylosmolene) } )
-      //   .attr("r", 5)
-      //   .attr("fill", "#69b3a2")
-
-
-      var bisect = d3.bisector(function (d) { return d.date; }).left;
-
-      var focus = lineSvg
-      .append('g')
-      .append('circle')
-      .attr("transform", "translate(50,10)")
-          .style("fill", "none")
-          .attr("stroke", "black")
-          .attr('r', 10)
-          .style("opacity", 0);
+      // .append('rect')
+      //     .style("fill", "none")
+      //     .style("pointer-events", "all")
+      //     .attr('width', width/2)
+      //     .attr('height', height/2)
+      //     .attr("transform", "translate(50,10)")
+      //     .on('mouseover', mouseover)
+      //     .on('mousemove', mousemove)
+      //     .on('mouseout', mouseout);
       
-      lineSvg
-      .append('rect')
-          .style("fill", "none")
-          .style("pointer-events", "all")
-          .attr('width', width/2)
-          .attr('height', height/2)
-          .attr("transform", "translate(50,10)")
-          .on('mouseover', mouseover)
-          .on('mousemove', mousemove)
-          .on('mouseout', mouseout);
+      // function mouseover() {
+      // focus.style("opacity", 1)
+      // }
       
-      function mouseover() {
-      focus.style("opacity", 1)
-      }
+      // function mousemove() {
+      // var x0 = x.invert(d3.mouse(this)[0]);
+      // var i = bisect(new_data, x0, 1);
+      // selectedData = new_data[i];
+      // // console.log(selectedData)
+      // focus
+      //   .attr("cx", x(new Date(selectedData.date)))
+      //   .attr("cy", y(selectedData.Methylosmolene));
       
-      function mousemove() {
-      var x0 = x.invert(d3.mouse(this)[0]);
-      var i = bisect(new_data, x0, 1);
-      selectedData = new_data[i];
-      // console.log(selectedData)
-      focus
-        .attr("cx", x(selectedData.date))
-        .attr("cy", y(selectedData.Methylosmolene));
+      // div.transition().duration(50).style("opacity", 1);
       
-      div.transition().duration(50).style("opacity", 1);
+      // div.html("Year: "+ selectedData.date +  "<br /> GDP: " + selectedData.Methylosmolene + "</b>")
+      //               .style("left", (d3.event.pageX) + 15 + "px")
+      //               .style("top", (d3.event.pageY) - 45 + "px");
       
-      div.html("Year: "+ selectedData.date +  "<br /> GDP: " + selectedData.Methylosmolene + "</b>")
-                    .style("left", (d3.event.pageX) + 15 + "px")
-                    .style("top", (d3.event.pageY) - 45 + "px");
+      // }
+      // function mouseout() {
       
-      }
-      function mouseout() {
-      
-      focus.style("opacity", 0);
-      div.transition().duration('50').style("opacity", 0);
-      }
+      // focus.style("opacity", 0);
+      // div.transition().duration('50').style("opacity", 0);
+      // }
 
       
 
@@ -648,6 +641,25 @@ lineSvg.selectAll("dot")
       .attr("transform", `translate(${105 + width/2},10)`)
       .attr("d", valueline2);
 
+      lineSvg.selectAll("dot")
+      .data(new_data)
+      
+      .enter().append("circle")
+      .attr("r", function(d)
+      {
+        if(d.Chlorodinine_anamoly==1)
+        {return 3;}
+      else
+      {return 0;
+      }
+      })
+      .attr("fill", "red")
+      .attr("transform", `translate(${105 + width/2},10)`)
+      .attr("cx", function(d) { 
+        return x(new Date(d.date)); })
+      .attr("cy", function(d) { 
+        return y(d.Chlorodinine); });
+
   // Add the 3rd valueline path.
   lineSvg.append("path")
       .datum(new_data)
@@ -657,6 +669,25 @@ lineSvg.selectAll("dot")
       .attr("transform", `translate(50,${height/2 + 80})`)
       .attr("d", valueline3);
 
+      lineSvg.selectAll("dot")
+      .data(new_data)
+      
+      .enter().append("circle")
+      .attr("r", function(d)
+      {
+        if(d.AGOC_anamoly==1)
+        {return 3;}
+      else
+      {return 0;
+      }
+      })
+      .attr("fill", "red")
+      .attr("transform", `translate(50,${height/2 + 80})`)
+      .attr("cx", function(d) { 
+        return x(new Date(d.date)); })
+      .attr("cy", function(d) { 
+        return y(d.AGOC_3A); });
+
   // Add the 4th valueline path.
   lineSvg.append("path")
       .datum(new_data)
@@ -665,6 +696,27 @@ lineSvg.selectAll("dot")
       .attr("stroke-width", 1.5)
       .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
       .attr("d", valueline4);
+
+      lineSvg.selectAll("dot")
+      .data(new_data)
+      
+      .enter().append("circle")
+      .attr("r", function(d)
+      {
+        if(d.Appluimonia_anamoly==1)
+        {return 3;}
+      else
+      {return 0;
+      }
+      })
+      .attr("fill", "red")
+      .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
+      .attr("cx", function(d) { 
+        return x(new Date(d.date)); })
+      .attr("cy", function(d) { 
+        return y(d.Appluimonia); });
+
+      
 
   
 // Add the 1st X Axis

@@ -96,6 +96,11 @@
     padding: 6px;
   }
 
+  #radialchart svg{
+    border:1px solid gray;
+    margin:5px;
+  }
+
 
 
   rect.bordered {

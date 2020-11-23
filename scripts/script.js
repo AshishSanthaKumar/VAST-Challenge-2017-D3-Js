@@ -2,7 +2,14 @@ var globalData;
 
 var startDate;
 var endDate;
-var c10 = d3.scaleOrdinal(d3.schemeTableau10).domain(["AGOC-3A", "Appluimonia", "Chlorodinine", "Methylosmolene"]);
+// var c10 = d3.scaleOrdinal(d3.schemePaired).domain(["AGOC-3A", "Test1","Appluimonia","Test", "Chlorodinine","Test2","Test3","Test4","Test5", "Methylosmolene"]);
+
+var chemicalColor={
+    'AGOC-3A':'#A6CEE3',
+    'Appluimonia':'#B2DF8A',
+    'Chlorodinine':'#FB9A99',
+    'Methylosmolene':'#6A3D9A'
+}
 var selectedSensor='All';
 
 function dateFormatter(dateToChange) {
@@ -135,7 +142,8 @@ function drawTimeline() {
     timeline.append("g")
         .attr("class", "brush")
         .call(brush)
-        .call(brush.move, x.range());
+        .call(brush.move,[100,700]);
+
 
     function brushed() {
         var selection = d3.event.selection;
@@ -166,7 +174,7 @@ function drawColumnChart() {
         bottom: 70,
         left: 60
     };
-    const columnChartWidth = 600 - margin.left - margin.right;
+    const columnChartWidth = 500 - margin.left - margin.right;
     const columnChartHeight = 400 - margin.top - margin.bottom;
 
     var maxY;
@@ -244,18 +252,19 @@ function drawColumnChart() {
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", function (d) {
-            return x(d.chemical) + 40;
+            return x(d.chemical) + 27;
         })
         .attr("fill", function (d) {
-            return c10(d.chemical);
+            return chemicalColor[d.chemical];
         })
-        .attr("width", x.bandwidth() - 75)
+        .attr("width", x.bandwidth() - 55)
         .attr("y", function (d) {
             return y(d.reading);
         })
         .attr("height", function (d) {
             return columnChartHeight - y(d.reading);
         });
+
 
     // add the x Axis
     columnSvg.append("g")
@@ -287,7 +296,7 @@ function drawColumnChart() {
         .attr("x", (columnChartWidth / 2))             
         .attr("y", -15 - (margin.top / 2))
         .attr("text-anchor", "middle")  
-        .style("font-size", "15px") 
+        .style("font-size", "13px") 
         .style("text-decoration", "underline")  
         .text(selectedSensor=='All'?'Average chemical reading from all the Sensors in the selected time frame':('Average chemical reading from Sensor '+selectedSensor.slice(-1)+' in the selected time frame'));
 

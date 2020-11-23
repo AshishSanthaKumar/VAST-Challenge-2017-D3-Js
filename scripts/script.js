@@ -174,7 +174,7 @@ function drawColumnChart() {
         bottom: 70,
         left: 60
     };
-    const columnChartWidth = 600 - margin.left - margin.right;
+    const columnChartWidth = 500 - margin.left - margin.right;
     const columnChartHeight = 400 - margin.top - margin.bottom;
 
     var maxY;
@@ -252,18 +252,19 @@ function drawColumnChart() {
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", function (d) {
-            return x(d.chemical) + 40;
+            return x(d.chemical) + 27;
         })
         .attr("fill", function (d) {
             return chemicalColor[d.chemical];
         })
-        .attr("width", x.bandwidth() - 75)
+        .attr("width", x.bandwidth() - 55)
         .attr("y", function (d) {
             return y(d.reading);
         })
         .attr("height", function (d) {
             return columnChartHeight - y(d.reading);
         });
+
 
     // add the x Axis
     columnSvg.append("g")
@@ -295,7 +296,7 @@ function drawColumnChart() {
         .attr("x", (columnChartWidth / 2))             
         .attr("y", -15 - (margin.top / 2))
         .attr("text-anchor", "middle")  
-        .style("font-size", "15px") 
+        .style("font-size", "13px") 
         .style("text-decoration", "underline")  
         .text(selectedSensor=='All'?'Average chemical reading from all the Sensors in the selected time frame':('Average chemical reading from Sensor '+selectedSensor.slice(-1)+' in the selected time frame'));
 

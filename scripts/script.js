@@ -389,27 +389,31 @@ function drawRadialChart() {
 
     d3.select("#radialchart").selectAll("*").remove();
     var radial_svg;
-    const width = 600,
-        height = 450,
-        chartRadius = height / 2 - 40;
+    const width = 500,
+        height = 350,
+        chartRadius = height / 1.85 - 50;
 
-    //tooltip
-
-    let tooltip = d3.select('#radialchart').append('div')
-        .attr('class', 'tooltip');
 
     //defining the radial characterstics
     const PI = Math.PI,
         arcMinRadius = 11,
         arcPadding = 5,
         labelPadding = -5,
-        numTicks = 10;
+        numTicks = 12;
 
     radial_svg = d3.select('#radialchart').append('svg')
         .attr('width', width)
         .attr('height', height)
         .append('g')
-        .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+        .attr('transform', 'translate(' + width / 2 + ',' + height / 1.8 + ')');
+
+    radial_svg.append("text")
+        .attr("x", 0)             
+        .attr("y", -175)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "15px") 
+        .style("text-decoration", "underline")
+        .text("Number of duplicates in the selected time frame")  
 
 
 
@@ -463,7 +467,7 @@ function drawRadialChart() {
 
     //Defining the scale and ticks
     let scale = d3.scaleLinear()
-        .domain([0, d3.max(localData, d => d.reading) * 1.1])
+        .domain([0, d3.max(localData, d => d.reading) * 1.2])
         .range([0, 2 * PI]);
 
     let ticks = scale.ticks(numTicks).slice(0, -1);
@@ -488,9 +492,10 @@ function drawRadialChart() {
         .attr('r', (d, i) => getOuterRadius(i) + arcPadding);
 
     radialAxis.append('text')
-        .attr('x', labelPadding)
-        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding + 7)
-        .text(d => d.display_name);
+        .attr('x', labelPadding+4)
+        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding + 2)
+        .text(d => d.display_name)
+        .style('font-size','11px');
 
     let axialAxis = radial_svg.append('g')
         .attr('class', 'a axis')
@@ -506,6 +511,7 @@ function drawRadialChart() {
         .attr('x', chartRadius + 10)
         .style('text-anchor', d => (scale(d) >= PI && scale(d) < 2 * PI ? 'end' : null))
         .attr('transform', d => 'rotate(' + (90 - rad2deg(scale(d))) + ',' + (chartRadius + 10) + ',0)')
+        .style('font-size','13px')
         .text(d => d);
 
     //data arcs

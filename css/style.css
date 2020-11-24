@@ -97,10 +97,16 @@
   }
 
 
-  .line {
+ #line-container .line {
     fill: none;
     stroke: #ffab00;
-    stroke-width: 3;
+    stroke-width: 1;
+}
+
+.line {
+  fill: none;
+  stroke: #ffab00;
+  stroke-width: 3;
 }
   
 .overlay {

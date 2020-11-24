@@ -483,6 +483,11 @@ var timeConv = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var x = d3.scaleTime().range([0, width/2]);
 var bisect = d3.bisector(function(d) { return d.x; }).left;
 var y = d3.scaleLinear().rangeRound([height/2, 0]);
+var y1 = d3.scaleLinear().rangeRound([height/2, 0]);
+var y2 = d3.scaleLinear().rangeRound([height/2, 0]);
+var y3 = d3.scaleLinear().rangeRound([height/2, 0]);
+var y4 = d3.scaleLinear().rangeRound([height/2, 0]);
+
 
 // define the 1st line
 var valueline1 = d3.line()
@@ -491,7 +496,7 @@ var valueline1 = d3.line()
 // .y(d => y(d.Methylosmolene));
     .x(function(d) { 
       return x( new Date(d.date)); })
-    .y(function(d) { return y(d.Methylosmolene); });
+    .y(function(d) { return y1(d.Methylosmolene); });
 
 // define the 2nd line
 var valueline2 = d3.line()
@@ -500,7 +505,7 @@ var valueline2 = d3.line()
     // .y(d => y(d.Chlorodinine));
 
     .x(function(d) { return x( new Date(d.date)); })
-    .y(function(d) { return y(d.Chlorodinine); }); 
+    .y(function(d) { return y2(d.Chlorodinine); }); 
       
 // define the 3rd line
 var valueline3 = d3.line()
@@ -508,7 +513,7 @@ var valueline3 = d3.line()
     // .x(d => x(d.date))
     // .y(d => y(d.AGOC_3A));  
     .x(function(d) { return x( new Date(d.date)); })
-    .y(function(d) { return y(d.AGOC_3A); });
+    .y(function(d) { return y3(d.AGOC_3A); });
 
 // define the 4th line
 var valueline4 = d3.line()
@@ -517,7 +522,7 @@ var valueline4 = d3.line()
     // .x(d => { x( new Date(d.date.split(" ")[0]))})
     // .y(d => y(d.Appluimonia)); 
     .x(function(d) { return x(new Date(d.date)); })
-    .y(function(d) { return y(d.Appluimonia); }); 
+    .y(function(d) { return y4(d.Appluimonia); }); 
     
      d3.csv("/linechart/"+ selectedSensor +"_final.csv").then(function(data) {
         //  console.log(data)
@@ -588,9 +593,16 @@ var valueline4 = d3.line()
       //console.log(new_data);
       // Scale the range of the data
   x.domain(d3.extent(new_data, function(d) { return new Date(d.date); })).clamp(true);
-  // y.domain([0,]).clamp(true);
-  y.domain([0, d3.max(new_data, function(d) {
-	  return Math.max(d.Methylosmolene,d.Chlorodinine,d.AGOC_3A,d.Appluimonia); })]);
+  y1.domain([0, d3.max(new_data, function(d) {
+    return Math.max(d.Methylosmolene); })]);
+  y2.domain([0, d3.max(new_data, function(d) {
+    return Math.max(d.Chlorodinine); })]);
+  y3.domain([0, d3.max(new_data, function(d) {
+    return Math.max(d.AGOC_3A); })]);
+  y4.domain([0, d3.max(new_data, function(d) {
+    return Math.max(d.Appluimonia); })]);
+  // y.domain([0, d3.max(new_data, function(d) {
+  //   return Math.max(d.Methylosmolene,d.Chlorodinine,d.AGOC_3A,d.Appluimonia); })]);
 //console.log(data);
 
 
@@ -598,8 +610,7 @@ var valueline4 = d3.line()
   lineSvg.append("path")
       .datum(new_data)
       .attr("class", "line")
-      .style("stroke", "orange")
-      .attr("stroke-width", 0.1)
+      .style("stroke", "#6A3D9A")
       .attr("transform", "translate(50,10)")
       .attr("d", valueline1);
 
@@ -620,7 +631,7 @@ else
 .attr("cx", function(d) { 
  return x(new Date(d.date)); })
 .attr("cy", function(d) { 
-  return y(d.Methylosmolene); });
+  return y1(d.Methylosmolene); });
 
 
       // var bisect = d3.bisector(function (d) { return d.date; }).left;
@@ -678,7 +689,7 @@ else
       .datum(new_data)
       .attr("class", "line")
       .attr("stroke-width", 0.1)
-      .style("stroke", "yellow")
+      .style("stroke", "#FB9A99")
       .attr("transform", `translate(${105 + width/2},10)`)
       .attr("d", valueline2);
 
@@ -699,13 +710,13 @@ else
       .attr("cx", function(d) { 
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
-        return y(d.Chlorodinine); });
+        return y2(d.Chlorodinine); });
 
   // Add the 3rd valueline path.
   lineSvg.append("path")
       .datum(new_data)
       .attr("class", "line")
-      .style("stroke", "blue")
+      .style("stroke", "#A6CEE3")
       .attr("stroke-width", 0.1)
       .attr("transform", `translate(50,${height/2 + 80})`)
       .attr("d", valueline3);
@@ -727,13 +738,13 @@ else
       .attr("cx", function(d) { 
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
-        return y(d.AGOC_3A); });
+        return y3(d.AGOC_3A); });
 
   // Add the 4th valueline path.
   lineSvg.append("path")
       .datum(new_data)
       .attr("class", "line")
-      .style("stroke", "green")
+      .style("stroke", "#B2DF8A'")
       .attr("stroke-width", 1.5)
       .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
       .attr("d", valueline4);
@@ -755,7 +766,7 @@ else
       .attr("cx", function(d) { 
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
-        return y(d.Appluimonia); });
+        return y4(d.Appluimonia); });
 
       
 
@@ -775,7 +786,7 @@ lineSvg.append("g")
 
  // Add the 1st Y Axis
   lineSvg.append("g")
-      .call(d3.axisLeft(y))
+      .call(d3.axisLeft(y1))
       .attr("transform", "translate(50,10)")
 
 // Add the 2nd X Axis
@@ -793,7 +804,7 @@ lineSvg.append("g")
 
 // Add the 2nd Y Axis
 lineSvg.append("g")
-.call(d3.axisLeft(y))
+.call(d3.axisLeft(y2))
 .attr("transform", "translate(550,10)");
   
 // Add the 3rd X Axis
@@ -811,7 +822,7 @@ lineSvg.append("g")
 
 // Add the 3rd  Y Axis
   lineSvg.append("g")
-      .call(d3.axisLeft(y))
+      .call(d3.axisLeft(y3))
       .attr("transform", "translate(50,290)");
 
 // Add the 4th X Axis
@@ -829,7 +840,7 @@ lineSvg.append("g")
 
 // Add the 4th  Y Axis
 lineSvg.append("g")
-.call(d3.axisLeft(y))
+.call(d3.axisLeft(y4))
 .attr("transform", "translate(550,290)");
     
     });

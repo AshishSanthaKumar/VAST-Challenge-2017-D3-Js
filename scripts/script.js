@@ -6,6 +6,8 @@ var s1=[];
 var s2=[];
 var s3=[];
 var s4=[];
+var selectedSensor;
+var selectedMethod;
 var c10 = d3.scaleOrdinal(d3.schemeTableau10).domain(["AGOC-3A","Appluimonia","Chlorodinine","Methylosmolene"]);
 
 function dateFormatter(dateToChange)
@@ -61,14 +63,14 @@ function drawPage()
         startDate=dateFormatter('2016-12-01 00:00:00');
         endDate=dateFormatter('2016-12-31 23:00:00')
     }
-    var selectedSensor=document.getElementById("sensors").value;
-    var selectedMethod=document.getElementById("method").value;
-    drawTimeline(startDate,endDate,selectedSensor,selectedMethod);
-    //drawColumnChart("2016-04-01 05:00:00","2016-04-04 19:00:00");
+    selectedSensor=document.getElementById("sensors").value;
+    selectedMethod=document.getElementById("method").value;
+    drawTimeline(startDate,endDate);
+    
 }
 
 
-function drawTimeline(startDate,endDate,selectedSensor,selectedMethod)
+function drawTimeline(startDate,endDate)
 {
     const margin = { top: 10, right: 10, bottom: 20, left: 25 };
     const width  = 1400 - margin.left - margin.right;
@@ -146,15 +148,15 @@ function drawTimeline(startDate,endDate,selectedSensor,selectedMethod)
         startDate=rangeDate[0];
         endDate=rangeDate[1];
 
-        drawAllCharts(startDate,endDate,selectedSensor,selectedMethod);
+        drawAllCharts(startDate,endDate);
       }
 
-    drawAllCharts(startDate,endDate,selectedSensor,selectedMethod);                
+    drawAllCharts(startDate,endDate);                
 }
 
-function drawAllCharts(startDate,endDate,selectedSensor,selectedMethod)
+function drawAllCharts(startDate,endDate)
 {
-    drawLineChart(startDate,endDate,selectedSensor,selectedMethod);
+    drawLineChart(startDate,endDate);
     drawColumnChart(startDate,endDate);
     drawRadialChart(startDate,endDate);
     
@@ -454,7 +456,16 @@ function convert(str) {
     return ([mnth,day,date.getFullYear()].join("/")+ " " +[hour,minute].join(":"));
   }
 
-function drawLineChart(startDate,endDate,selectedSensor,selectedMethod)
+  function convert1(str) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    hour = ("0" + String(date.getHours())).slice(-2)
+    minute = ("0" + date.getMinutes()).slice(-2)
+    //second=("0" + date.getSeconds()).slice(-2)
+    return ([date.getFullYear(), mnth, day].join("-") + " " + [hour, minute].join(":"));
+  }
+function drawLineChart(startDate,endDate)
 {  
     // set the dimensions and margins of the graph
 var lineSvg;
@@ -463,18 +474,6 @@ width = 960 - margin.left - margin.right,
 height = 500 - margin.top - margin.bottom;
 
 
-d3.select("#line-container").selectAll("*").remove();
-  // append the svg obgect to the body of the page
-// appends a 'group' element to 'svg'
-// moves the 'group' element to the top left margin
-// we are appending SVG first
-lineSvg = d3.select("#line-container").append("svg")
-    .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("width", width + margin.left + margin.right+50)
-    .attr("height", height + margin.top + margin.bottom+50)
-    //.style("padding", padding)
-    .style("margin", margin)
-    .classed("svg-content", true);
 
       // Define date parser
 var timeConv = d3.timeParse("%Y-%m-%d %H:%M:%S");
@@ -491,48 +490,31 @@ var y4 = d3.scaleLinear().rangeRound([height/2, 0]);
 
 // define the 1st line
 var valueline1 = d3.line()
-// .defined(d => !isNaN(d.Methylosmolene))
-// .x(d => x(d.date))
-// .y(d => y(d.Methylosmolene));
     .x(function(d) { 
       return x( new Date(d.date)); })
     .y(function(d) { return y1(d.Methylosmolene); });
 
 // define the 2nd line
 var valueline2 = d3.line()
-    // .defined(d => !isNaN(d.Chlorodinine))
-    // .x(d => x(d.date))
-    // .y(d => y(d.Chlorodinine));
-
     .x(function(d) { return x( new Date(d.date)); })
     .y(function(d) { return y2(d.Chlorodinine); }); 
       
 // define the 3rd line
 var valueline3 = d3.line()
-    // .defined(d => !isNaN(d.AGOC_3A))
-    // .x(d => x(d.date))
-    // .y(d => y(d.AGOC_3A));  
     .x(function(d) { return x( new Date(d.date)); })
     .y(function(d) { return y3(d.AGOC_3A); });
 
 // define the 4th line
 var valueline4 = d3.line()
-
-    // .defined(d => !isNaN(d.Appluimonia))
-    // .x(d => { x( new Date(d.date.split(" ")[0]))})
-    // .y(d => y(d.Appluimonia)); 
     .x(function(d) { return x(new Date(d.date)); })
     .y(function(d) { return y4(d.Appluimonia); }); 
     
      d3.csv("/linechart/"+ selectedSensor +"_final.csv").then(function(data) {
-        //  console.log(data)
        var new_data= [];
     
       data.forEach(function(d)
       {
-        //console.log(Date.parse(timeConv(d.date)));
         var element={};
-        // console.log(timeConv(d.date));
         if((Date.parse(timeConv(d.date))>=Date.parse(convert(startDate))) && (Date.parse(timeConv(d.date))<=Date.parse(convert(endDate))))
         {   
           if(selectedMethod == "reading")
@@ -588,9 +570,20 @@ var valueline4 = d3.line()
             new_data.push(element);
           }
         }
-        //console.log(startDate)
       });
-      //console.log(new_data);
+      d3.select("#line-container").selectAll("*").remove();
+  // append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+// we are appending SVG first
+lineSvg = d3.select("#line-container").append("svg")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("width", width + margin.left + margin.right+50)
+    .attr("height", height + margin.top + margin.bottom+50)
+    //.style("padding", padding)
+    .style("margin", margin)
+    .classed("svg-content", true);
+
       // Scale the range of the data
   x.domain(d3.extent(new_data, function(d) { return new Date(d.date); })).clamp(true);
   y1.domain([0, d3.max(new_data, function(d) {
@@ -603,8 +596,6 @@ var valueline4 = d3.line()
     return Math.max(d.Appluimonia); })]);
   // y.domain([0, d3.max(new_data, function(d) {
   //   return Math.max(d.Methylosmolene,d.Chlorodinine,d.AGOC_3A,d.Appluimonia); })]);
-//console.log(data);
-
 
   //Add the 1st valueline path.
   lineSvg.append("path")
@@ -632,57 +623,55 @@ else
  return x(new Date(d.date)); })
 .attr("cy", function(d) { 
   return y1(d.Methylosmolene); });
+  var bisect = d3.bisector(function (d) { return d.date; }).left;
+
+  var focus = lineSvg
+    .append('g')
+    .append('circle')
+    .attr("transform", "translate(50,10)")
+    .style("fill", "none")
+    .attr("stroke", "black")
+    .attr('r', 10)
+    .style("opacity", 0);
+
+  lineSvg
+    .append('rect')
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr('width', width / 2)
+    .attr('height', height / 2)
+    .attr("transform", "translate(50,10)")
+    .on('mouseover', mouseover)
+    .on('mousemove', mousemove)
+    .on('mouseout', mouseout);
+
+  function mouseover() {
+    focus.style("opacity", 1)
+  }
+
+  function mousemove() {
+    var x0 = x.invert(d3.mouse(this)[0]);
+    var i = bisect(new_data, convert1(x0) + ":00", 1);
+    selectedData = new_data[i];
+    focus
+      .attr("cx", x(new Date(selectedData.date)))
+      .attr("cy", y(selectedData.Methylosmolene));
+
+    div.transition().duration(50).style("opacity", 1);
+
+    div.html("Date: " + selectedData.date + "<br /> Methylosmolene Concentration: " + selectedData.Methylosmolene + "</b>")
+      .style("left", (d3.event.pageX) + 15 + "px")
+      .style("top", (d3.event.pageY) - 45 + "px");
+
+  }
+  function mouseout() {
+
+    focus.style("opacity", 0);
+    div.transition().duration('50').style("opacity", 0);
+  }
 
 
-      // var bisect = d3.bisector(function (d) { return d.date; }).left;
-
-      // var focus = lineSvg
-      // .append('g')
-      // .append('circle')
-      // .attr("transform", "translate(50,10)")
-      //     .style("fill", "none")
-      //     .attr("stroke", "black")
-      //     .attr('r', 10)
-      //     .style("opacity", 0);
-      
-      // lineSvg
-      // .append('rect')
-      //     .style("fill", "none")
-      //     .style("pointer-events", "all")
-      //     .attr('width', width/2)
-      //     .attr('height', height/2)
-      //     .attr("transform", "translate(50,10)")
-      //     .on('mouseover', mouseover)
-      //     .on('mousemove', mousemove)
-      //     .on('mouseout', mouseout);
-      
-      // function mouseover() {
-      // focus.style("opacity", 1)
-      // }
-      
-      // function mousemove() {
-      // var x0 = x.invert(d3.mouse(this)[0]);
-      // var i = bisect(new_data, x0, 1);
-      // selectedData = new_data[i];
-      // // console.log(selectedData)
-      // focus
-      //   .attr("cx", x(new Date(selectedData.date)))
-      //   .attr("cy", y(selectedData.Methylosmolene));
-      
-      // div.transition().duration(50).style("opacity", 1);
-      
-      // div.html("Year: "+ selectedData.date +  "<br /> GDP: " + selectedData.Methylosmolene + "</b>")
-      //               .style("left", (d3.event.pageX) + 15 + "px")
-      //               .style("top", (d3.event.pageY) - 45 + "px");
-      
-      // }
-      // function mouseout() {
-      
-      // focus.style("opacity", 0);
-      // div.transition().duration('50').style("opacity", 0);
-      // }
-
-      
+            
 
   // Add the 2nd valueline path.
   lineSvg.append("path")

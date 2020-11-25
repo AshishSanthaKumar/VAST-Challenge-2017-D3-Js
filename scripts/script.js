@@ -299,7 +299,7 @@ function drawColumnChart() {
         .attr("x", (columnChartWidth / 2-10))             
         .attr("y",  - (margin.top / 2))
         .attr("text-anchor", "middle")  
-        .style("font-size", "10px") 
+        .style("font-size", "11px") 
         .style("text-decoration", "underline")  
         .text(selectedSensor=='All'?'Average chemical reading of all the Sensors in the time frame':('Average chemical reading from Sensor '+selectedSensor.slice(-1)+' in the  time frame'));
 
@@ -393,8 +393,8 @@ function drawRadialChart() {
     d3.select("#radialchart").selectAll("*").remove();
     var radial_svg;
     const width = 340,
-        height = 340,
-        chartRadius = height / 1.9 - 50;
+        height = 320,
+        chartRadius = height / 1.8 - 50;
 
 
     //defining the radial characterstics
@@ -412,9 +412,9 @@ function drawRadialChart() {
 
     radial_svg.append("text")
         .attr("x", 0)             
-        .attr("y", -175)
+        .attr("y", -165)
         .attr("text-anchor", "middle")  
-        .style("font-size", "13px") 
+        .style("font-size", "11px") 
         .style("text-decoration", "underline")
         .text("Number of duplicates in the selected time frame")  
 
@@ -511,10 +511,10 @@ function drawRadialChart() {
         .attr('x2', chartRadius);
 
     axialAxis.append('text')
-        .attr('x', chartRadius + 10)
+        .attr('x', chartRadius + 7)
         .style('text-anchor', d => (scale(d) >= PI && scale(d) < 2 * PI ? 'end' : null))
         .attr('transform', d => 'rotate(' + (90 - rad2deg(scale(d))) + ',' + (chartRadius + 10) + ',0)')
-        .style('font-size','13px')
+        .style('font-size','11px')
         .text(d => d);
 
     //data arcs

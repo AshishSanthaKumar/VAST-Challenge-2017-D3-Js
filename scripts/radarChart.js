@@ -32,7 +32,7 @@ function RadarChart(currSensor, data, color, location, config) {
 				.style("opacity", 1);
 
 			onSensorSelected(d3.select(this).data()[0]);
-			drawHeatmap(parseInt(d3.select(this).data()[0]['name'][6]));
+			//drawHeatmap(parseInt(d3.select(this).data()[0]['name'][6]));
 			
 
 		})

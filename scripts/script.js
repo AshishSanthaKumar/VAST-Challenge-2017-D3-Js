@@ -142,7 +142,7 @@ function drawTimeline() {
     timeline.append("g")
         .attr("class", "brush")
         .call(brush)
-        .call(brush.move,[100,700]);
+        .call(brush.move,[91,350]);
 
 
     function brushed() {
@@ -389,31 +389,33 @@ function drawRadialChart() {
 
     d3.select("#radialchart").selectAll("*").remove();
     var radial_svg;
-    const width = 600,
-        height = 450,
-        chartRadius = height / 2 - 40;
+    const width = 500,
+        height = 350,
+        chartRadius = height / 1.85 - 50;
 
-    //tooltip
-
-    let tooltip = d3.select('#radialchart').append('div')
-        .attr('class', 'tooltip');
 
     //defining the radial characterstics
     const PI = Math.PI,
         arcMinRadius = 11,
         arcPadding = 5,
         labelPadding = -5,
-        numTicks = 10;
+        numTicks = 12;
 
     radial_svg = d3.select('#radialchart').append('svg')
         .attr('width', width)
         .attr('height', height)
         .append('g')
-        .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+        .attr('transform', 'translate(' + width / 2 + ',' + height / 1.8 + ')');
 
-    // var radial= radialData.filter(function(d){
-    //     return d['Date']>=startDate && d['Date']<=endDate;
-    // });
+    radial_svg.append("text")
+        .attr("x", 0)             
+        .attr("y", -175)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "15px") 
+        .style("text-decoration", "underline")
+        .text("Number of duplicates in the selected time frame")  
+
+
 
     localData = [{
             "monitor": "Sensor1",
@@ -461,23 +463,11 @@ function drawRadialChart() {
             "reading": jsonRadial['9']['yes']
         }
     ]
-console.log(selectedSensor);
-    //     for(i=0;i<radial.length;i++)
-    //     {
-    //     localData[0]['reading']  =localData[0]['reading'] +Number(radial[i]['M1']);
-    //     localData[1]['reading']  =localData[1]['reading'] +Number(radial[i]['M2']);
-    //     localData[2]['reading']  =localData[2]['reading'] +Number(radial[i]['M3']);
-    //     localData[3]['reading']  =localData[3]['reading'] +Number(radial[i]['M4']);
-    //     localData[4]['reading']  =localData[4]['reading'] +Number(radial[i]['M5']);
-    //     localData[5]['reading']  =localData[5]['reading'] +Number(radial[i]['M6']);
-    //     localData[6]['reading']  =localData[6]['reading'] +Number(radial[i]['M7']);
-    //     localData[7]['reading']  =localData[7]['reading'] +Number(radial[i]['M8']);
-    //     localData[8]['reading']  =localData[8]['reading'] +Number(radial[i]['M9']);
-    //     }
+
 
     //Defining the scale and ticks
     let scale = d3.scaleLinear()
-        .domain([0, d3.max(localData, d => d.reading) * 1.1])
+        .domain([0, d3.max(localData, d => d.reading) * 1.2])
         .range([0, 2 * PI]);
 
     let ticks = scale.ticks(numTicks).slice(0, -1);
@@ -502,9 +492,10 @@ console.log(selectedSensor);
         .attr('r', (d, i) => getOuterRadius(i) + arcPadding);
 
     radialAxis.append('text')
-        .attr('x', labelPadding)
-        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding + 7)
-        .text(d => d.display_name);
+        .attr('x', labelPadding+4)
+        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding + 2)
+        .text(d => d.display_name)
+        .style('font-size','11px');
 
     let axialAxis = radial_svg.append('g')
         .attr('class', 'a axis')
@@ -520,6 +511,7 @@ console.log(selectedSensor);
         .attr('x', chartRadius + 10)
         .style('text-anchor', d => (scale(d) >= PI && scale(d) < 2 * PI ? 'end' : null))
         .attr('transform', d => 'rotate(' + (90 - rad2deg(scale(d))) + ',' + (chartRadius + 10) + ',0)')
+        .style('font-size','13px')
         .text(d => d);
 
     //data arcs
@@ -547,14 +539,19 @@ console.log(selectedSensor);
     }
 
     function showTooltip(d) {
-        tooltip.style('left', (d3.event.pageX + 10) + 'px')
-            .style('top', (d3.event.pageY - 25) + 'px')
-            .style('display', 'inline-block')
-            .html(d.reading);
+        div.transition()
+                .duration(50)
+                .style("opacity", 1);
+        div.html(`${d.reading}`)
+                .style("left", (d3.event.pageX) + 10 + "px")
+                .style("top", (d3.event.pageY) + 10 + "px");
+
     }
 
     function hideTooltip() {
-        tooltip.style('display', 'none');
+        div.transition()
+                     .duration(50)
+                     .style("opacity", 0);
     }
 
     function rad2deg(angle) {
@@ -578,7 +575,7 @@ console.log(selectedSensor);
 function drawHeatMap(){
     // d3.select("#heatmap").selectAll("*").remove();
     
-    console.log(startDate);
+    
     // sensorval = document.getElementById('sensor').value;
     if(selectedSensor == 'All'){
         sensorval = 1;
@@ -587,11 +584,11 @@ function drawHeatMap(){
         sensorval = parseInt(selectedSensor[6]);
     }
     
-    console.log(sensorval);
+   
     var startdateString = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000 ))
                     .toISOString()
                     .split("T")[0];
-    console.log(startdateString);
+    
     var margin = { top: 50, right: 0, bottom: 100, left: 30 },
           width = 960 - margin.left - margin.right,
           height = 430 - margin.top - margin.bottom,
@@ -603,7 +600,7 @@ function drawHeatMap(){
           times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
           datasets = [`../MC2Data/sensor_${sensorval}_new.json`];
 
-          console.log(d3.schemeBlues);
+          
     d3.select("#heatmap").selectAll("*").remove();
       var svg = d3.select("#heatmap").append("svg")
           .attr("width", width + margin.left + margin.right +100)
@@ -637,12 +634,12 @@ function drawHeatMap(){
 
         function(data) {
 
-          console.log(data);
+     
           var colorScale = d3.scaleQuantile()
               .domain([0, buckets - 1, d3.max(data[startdateString], function (d) { return (d.value); })])
               .range(colors);
 
-              console.log([0].concat(colorScale.quantiles()));
+              
           var cards = svg.selectAll(".hour")
               .data(data[startdateString]);
 

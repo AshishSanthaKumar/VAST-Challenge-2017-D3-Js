@@ -3,7 +3,7 @@ function onSensorSelected(sensorSelected) {
     //{name: "Sensor3", location: [76,41]}
     // you shouldn't need the location. 
     //Use sensorSelected.name to get the name of the sensor selected and then you can trigger a filter/selection on your chart
-    selectedSensor=sensorSelected.name;
+    selectedSensor = sensorSelected.name;
     drawAllCharts();
 }
 
@@ -123,7 +123,7 @@ function formatTimePicker(date) {
 function step() {
     currentValue = new Date(dateSelection.val() + ' ' + timeSelection.val());
     currentValue.setHours(currentValue.getHours() + 1);
-    let maxDate = new Date(dateSelection.attr('max'))
+    let maxDate = new Date(dateSelection.attr('max') + ' ' + timeSelection.attr('max'))
     if (currentValue.getTime() > maxDate.getTime()) {
         playButton.className = "";
         playButton.value = "▶";

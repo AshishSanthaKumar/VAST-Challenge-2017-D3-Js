@@ -389,9 +389,9 @@ function drawRadialChart() {
 
     d3.select("#radialchart").selectAll("*").remove();
     var radial_svg;
-    const width = 350,
-        height = 400,
-        chartRadius = height / 2 - 50;
+    const width = 340,
+        height = 340,
+        chartRadius = height / 1.9 - 50;
 
 
     //defining the radial characterstics
@@ -409,9 +409,9 @@ function drawRadialChart() {
 
     radial_svg.append("text")
         .attr("x", 0)             
-        .attr("y", -195)
+        .attr("y", -175)
         .attr("text-anchor", "middle")  
-        .style("font-size", "15px") 
+        .style("font-size", "13px") 
         .style("text-decoration", "underline")
         .text("Number of duplicates in the selected time frame")  
 
@@ -493,9 +493,9 @@ function drawRadialChart() {
 
     radialAxis.append('text')
         .attr('x', labelPadding+4)
-        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding +3 )
+        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding +2 )
         .text(d => d.display_name)
-        .style('font-size','12px');
+        .style('font-size','10px');
 
     let axialAxis = radial_svg.append('g')
         .attr('class', 'a axis')

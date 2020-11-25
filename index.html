@@ -76,6 +76,14 @@
       </div>
       <div class="right-div">
         <!-- Line chart here -->
+        <label for="method" >Choose a reading type:</label>
+    <select name="method" id="method" onchange="drawPage()">
+      <option value="reading" selected>Original Reading</option>
+      <option value="cum_sum">Cumulative Sumation of the Reading</option>
+      <option value="square_root">Square Root of the Reading</option>
+      <option value="cube">Cube of the Reading</option>
+    </select>
+    <div id='line-container'></div>
       </div>
     </div>
   </div>

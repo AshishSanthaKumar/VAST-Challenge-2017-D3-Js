@@ -150,4 +150,43 @@
   {
     width:25%;
   }
+  #line-container .line {
+    fill: none;
+    stroke: #ffab00;
+    stroke-width: 1;
+}
+
+.line {
+  fill: none;
+  stroke: #ffab00;
+  stroke-width: 3;
+}
   
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+/* Style the dots by assigning a fill and stroke */
+.dot {
+    fill: #ffab00;
+    stroke: #fff;
+}
+
+
+  .point {
+    stroke: none;
+    fill: #9c9c9c;
+    }
+
+    div.tooltip-donut {
+      position: absolute;
+      text-align: center;
+      padding: .5rem;
+      background: #535151e7;
+      color: #e8eaeb;
+      border: 2px solid #313639;
+      border-radius: 30px;
+      pointer-events: none;
+      font-size: 1rem;
+    }

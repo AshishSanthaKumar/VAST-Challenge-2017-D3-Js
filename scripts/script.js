@@ -389,9 +389,9 @@ function drawRadialChart() {
 
     d3.select("#radialchart").selectAll("*").remove();
     var radial_svg;
-    const width = 500,
-        height = 350,
-        chartRadius = height / 1.85 - 50;
+    const width = 350,
+        height = 400,
+        chartRadius = height / 2 - 50;
 
 
     //defining the radial characterstics
@@ -399,7 +399,7 @@ function drawRadialChart() {
         arcMinRadius = 11,
         arcPadding = 5,
         labelPadding = -5,
-        numTicks = 12;
+        numTicks = 10;
 
     radial_svg = d3.select('#radialchart').append('svg')
         .attr('width', width)
@@ -409,7 +409,7 @@ function drawRadialChart() {
 
     radial_svg.append("text")
         .attr("x", 0)             
-        .attr("y", -175)
+        .attr("y", -195)
         .attr("text-anchor", "middle")  
         .style("font-size", "15px") 
         .style("text-decoration", "underline")
@@ -493,9 +493,9 @@ function drawRadialChart() {
 
     radialAxis.append('text')
         .attr('x', labelPadding+4)
-        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding + 2)
+        .attr('y', (d, i) => -getOuterRadius(i) + arcPadding +3 )
         .text(d => d.display_name)
-        .style('font-size','11px');
+        .style('font-size','12px');
 
     let axialAxis = radial_svg.append('g')
         .attr('class', 'a axis')

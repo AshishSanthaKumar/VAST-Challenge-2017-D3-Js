@@ -131,4 +131,19 @@
     padding: 6px;
     font-size: 0.8rem;
   }
+
+  .left-div
+  {
+    width:25%;
+  }
+
+  .middle-div
+  {
+    width:50%;
+  }
+
+  .right-div
+  {
+    width:25%;
+  }
   

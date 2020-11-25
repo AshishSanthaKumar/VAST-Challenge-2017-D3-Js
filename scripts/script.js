@@ -623,15 +623,15 @@ else
  return x(new Date(d.date)); })
 .attr("cy", function(d) { 
   return y1(d.Methylosmolene); });
-  var bisect = d3.bisector(function (d) { return d.date; }).left;
+  var bisect1 = d3.bisector(function (d) {return d.date; }).left;
 
-  var focus = lineSvg
+  var focus1 = lineSvg
     .append('g')
     .append('circle')
     .attr("transform", "translate(50,10)")
     .style("fill", "none")
     .attr("stroke", "black")
-    .attr('r', 10)
+    .attr('r', 5)
     .style("opacity", 0);
 
   lineSvg
@@ -641,32 +641,32 @@ else
     .attr('width', width / 2)
     .attr('height', height / 2)
     .attr("transform", "translate(50,10)")
-    .on('mouseover', mouseover)
-    .on('mousemove', mousemove)
-    .on('mouseout', mouseout);
+    .on('mouseover', mouseover1)
+    .on('mousemove', mousemove1)
+    .on('mouseout', mouseout1);
 
-  function mouseover() {
-    focus.style("opacity", 1)
+  function mouseover1() {
+    focus1.style("opacity", 1)
   }
 
-  function mousemove() {
+  function mousemove1() {
     var x0 = x.invert(d3.mouse(this)[0]);
-    var i = bisect(new_data, convert1(x0) + ":00", 1);
+    var i = bisect1(new_data, convert1(x0) + ":00", 1);
     selectedData = new_data[i];
-    focus
+    focus1
       .attr("cx", x(new Date(selectedData.date)))
       .attr("cy", y(selectedData.Methylosmolene));
 
-    div.transition().duration(50).style("opacity", 1);
+    div.transition().duration(50).style("opacity", 0.8);
 
     div.html("Date: " + selectedData.date + "<br /> Methylosmolene Concentration: " + selectedData.Methylosmolene + "</b>")
       .style("left", (d3.event.pageX) + 15 + "px")
       .style("top", (d3.event.pageY) - 45 + "px");
 
   }
-  function mouseout() {
+  function mouseout1() {
 
-    focus.style("opacity", 0);
+    focus1.style("opacity", 0);
     div.transition().duration('50').style("opacity", 0);
   }
 
@@ -700,6 +700,54 @@ else
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
         return y2(d.Chlorodinine); });
+      var  bisect2 = d3.bisector(function (d) { return d.date; }).left;
+
+  var focus2 = lineSvg
+    .append('g')
+    .append('circle')
+    .attr("transform", `translate(${105 + width/2},10)`)
+    .style("fill", "none")
+    .attr("stroke", "black")
+    .attr('r', 5)
+    .style("opacity", 0);
+
+  lineSvg
+    .append('rect')
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr('width', width / 2)
+    .attr('height', height / 2)
+    .attr("transform", `translate(${105 + width/2},10)`)
+    .on('mouseover', mouseover2)
+    .on('mousemove', mousemove2)
+    .on('mouseout', mouseout2);
+
+  function mouseover2() {
+    focus2.style("opacity", 1)
+  }
+
+  function mousemove2() {
+    var x0 = x.invert(d3.mouse(this)[0]);
+    var i = bisect2(new_data, convert1(x0) + ":00", 1);
+    selectedData = new_data[i];
+    focus2
+      .attr("cx", x(new Date(selectedData.date)))
+      .attr("cy", y(selectedData.Methylosmolene));
+
+    div.transition().duration(50).style("opacity", 0.8);
+
+    div.html("Date: " + selectedData.date + "<br /> Chlorodinine Concentration: " + selectedData.Chlorodinine + "</b>")
+      .style("left", (d3.event.pageX) + 15 + "px")
+      .style("top", (d3.event.pageY) - 45 + "px");
+
+  }
+  function mouseout2() {
+
+    focus2.style("opacity", 0);
+    div.transition().duration('50').style("opacity", 0);
+  }
+
+        
 
   // Add the 3rd valueline path.
   lineSvg.append("path")
@@ -728,6 +776,54 @@ else
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
         return y3(d.AGOC_3A); });
+        var  bisect3 = d3.bisector(function (d) { return d.date; }).left;
+
+  var focus3 = lineSvg
+    .append('g')
+    .append('circle')
+    .attr("transform", `translate(50,${height/2 + 80})`)
+    .style("fill", "none")
+    .attr("stroke", "black")
+    .attr('r', 5)
+    .style("opacity", 0);
+
+  lineSvg
+    .append('rect')
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr('width', width / 2)
+    .attr('height', height / 2)
+    .attr("transform", `translate(50,${height/2 + 80})`)
+    .on('mouseover', mouseover3)
+    .on('mousemove', mousemove3)
+    .on('mouseout', mouseout3);
+
+  function mouseover3() {
+    focus3.style("opacity", 1)
+  }
+
+  function mousemove3() {
+    var x0 = x.invert(d3.mouse(this)[0]);
+    var i = bisect3(new_data, convert1(x0) + ":00", 1);
+    selectedData = new_data[i];
+    focus3
+      .attr("cx", x(new Date(selectedData.date)))
+      .attr("cy", y(selectedData.Methylosmolene));
+
+    div.transition().duration(50).style("opacity", 0.8);
+
+    div.html("Date: " + selectedData.date + "<br /> AGOC_3A Concentration: " + selectedData.AGOC_3A + "</b>")
+    .style("text-align","left")
+    .style("left", (d3.event.pageX) + "px")
+    .style("top", (d3.event.pageY - 15) + "px");
+
+  }
+  function mouseout3() {
+
+    focus3.style("opacity", 0);
+    div.transition().duration('50').style("opacity", 0);
+  }
+
 
   // Add the 4th valueline path.
   lineSvg.append("path")
@@ -756,6 +852,54 @@ else
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
         return y4(d.Appluimonia); });
+        var  bisect4 = d3.bisector(function (d) { return d.date; }).left;
+
+  var focus4 = lineSvg
+    .append('g')
+    .append('circle')
+    .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
+    .style("fill", "none")
+    .attr("stroke", "black")
+    .attr('r', 5)
+    .style("opacity", 0);
+
+  lineSvg
+    .append('rect')
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr('class', 'tooltip')
+    .attr('width', width / 2)
+    .attr('height', height / 2)
+    .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
+    .on('mouseover', mouseover4)
+    .on('mousemove', mousemove4)
+    .on('mouseout', mouseout4);
+
+  function mouseover4() {
+    focus4.style("opacity", 1)
+  }
+
+  function mousemove4() {
+    var x0 = x.invert(d3.mouse(this)[0]);
+    var i = bisect4(new_data, convert1(x0) + ":00", 1);
+    selectedData = new_data[i];
+    focus4
+      .attr("cx", x(new Date(selectedData.date)))
+      .attr("cy", y(selectedData.Methylosmolene));
+
+    div.transition().duration(50).style("opacity", 0.8);
+
+    div.html("Date: " + selectedData.date + "<br /> Appluimonia Concentration: " + selectedData.Appluimonia + "</b>")
+      .style("left", (d3.event.pageX) + 15 + "px")
+      .style("top", (d3.event.pageY) - 45 + "px");
+
+  }
+  function mouseout4() {
+
+    focus4.style("opacity", 0);
+    div.transition().duration('50').style("opacity", 0);
+  }
+
 
       
 
@@ -837,3 +981,4 @@ lineSvg.append("g")
  
     
 }
+

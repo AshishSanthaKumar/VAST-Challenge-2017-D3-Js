@@ -119,13 +119,21 @@
     fill: #ffab00;
     stroke: #fff;
 }
-.tooltip {
-  fill: #2b2929;
-  font-family: Georgia;
-  font-size: 150%;
-  }
+
 
   .point {
     stroke: none;
     fill: #9c9c9c;
+    }
+
+    div.tooltip-donut {
+      position: absolute;
+      text-align: center;
+      padding: .5rem;
+      background: #535151e7;
+      color: #e8eaeb;
+      border: 2px solid #313639;
+      border-radius: 30px;
+      pointer-events: none;
+      font-size: 1rem;
     }

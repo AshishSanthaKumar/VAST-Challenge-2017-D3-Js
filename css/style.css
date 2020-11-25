@@ -55,6 +55,10 @@
   
   }
 
+  #column-container .x-axis text {
+    font-size: 7px;
+    }
+
   #radialchart, #col{
     display: inline-block;
     width: 650px;

@@ -169,13 +169,13 @@ function drawColumnChart() {
 
     var columnSvg;
     const margin = {
-        top: 70,
+        top: 50,
         right: 30,
-        bottom: 70,
-        left: 60
+        bottom: 50,
+        left: 50
     };
-    const columnChartWidth = 500 - margin.left - margin.right;
-    const columnChartHeight = 400 - margin.top - margin.bottom;
+    const columnChartWidth = 340 - margin.left - margin.right;
+    const columnChartHeight = 300 - margin.top - margin.bottom;
 
     var maxY;
     var barPadding = 0.2;
@@ -252,12 +252,12 @@ function drawColumnChart() {
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", function (d) {
-            return x(d.chemical) + 27;
+            return x(d.chemical) + 20;
         })
         .attr("fill", function (d) {
             return chemicalColor[d.chemical];
         })
-        .attr("width", x.bandwidth() - 55)
+        .attr("width", x.bandwidth() - 40)
         .attr("y", function (d) {
             return y(d.reading);
         })
@@ -269,6 +269,7 @@ function drawColumnChart() {
     // add the x Axis
     columnSvg.append("g")
         .attr("transform", "translate(0," + columnChartHeight + ")")
+        .attr("class","x-axis")
         .call(d3.axisBottom(x));
 
     // add the y Axis
@@ -281,6 +282,7 @@ function drawColumnChart() {
         .attr("y", 10 - margin.left)
         .attr("x", 0 - (columnChartHeight / 2))
         .attr("dy", "1em")
+        .style("font-size", "11px") 
         .style("text-anchor", "middle")
         .text("Chemical Reading");
 
@@ -288,17 +290,18 @@ function drawColumnChart() {
     columnSvg.append("text")
         .attr("transform",
             "translate(" + (columnChartWidth / 2) + " ," +
-            (columnChartHeight + margin.top-30) + ")")
+            (columnChartHeight + margin.top-20) + ")")
         .style("text-anchor", "middle")
+        .style("font-size", "11px") 
         .text("Chemicals");
 
     columnSvg.append("text")
-        .attr("x", (columnChartWidth / 2))             
-        .attr("y", -15 - (margin.top / 2))
+        .attr("x", (columnChartWidth / 2-10))             
+        .attr("y",  - (margin.top / 2))
         .attr("text-anchor", "middle")  
-        .style("font-size", "13px") 
+        .style("font-size", "10px") 
         .style("text-decoration", "underline")  
-        .text(selectedSensor=='All'?'Average chemical reading from all the Sensors in the selected time frame':('Average chemical reading from Sensor '+selectedSensor.slice(-1)+' in the selected time frame'));
+        .text(selectedSensor=='All'?'Average chemical reading of all the Sensors in the time frame':('Average chemical reading from Sensor '+selectedSensor.slice(-1)+' in the  time frame'));
 
 }
 
@@ -389,7 +392,7 @@ function drawRadialChart() {
 
     d3.select("#radialchart").selectAll("*").remove();
     var radial_svg;
-    const width = 350,
+    const width = 340,
         height = 400,
         chartRadius = height / 2 - 50;
 

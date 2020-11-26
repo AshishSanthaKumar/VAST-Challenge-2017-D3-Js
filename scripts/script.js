@@ -778,7 +778,7 @@ var valueline4 = d3.line()
     .y(function(d) { return y4(d.Methylosmolene); }); 
     
     if(selectedSensor == 'All'){
-        sensorval = 1;
+        sensorval = "main";
     }
     else{
         sensorval = parseInt(selectedSensor[6]);
@@ -914,7 +914,7 @@ else
     .style("fill", "none")
     .style("pointer-events", "all")
     .attr('width', width / 2)
-    .attr('height', height / 2)
+    .attr('height', height / 4)
     .attr("transform", "translate(50,0)")
     .on('mouseover', mouseover1)
     .on('mousemove', mousemove1)
@@ -991,7 +991,7 @@ else
     .style("fill", "none")
     .style("pointer-events", "all")
     .attr('width', width / 2)
-    .attr('height', height / 2)
+    .attr('height', height / 4)
     .attr("transform",  "translate(50,300)")
     .on('mouseover', mouseover2)
     .on('mousemove', mousemove2)
@@ -1067,7 +1067,7 @@ else
     .style("fill", "none")
     .style("pointer-events", "all")
     .attr('width', width / 2)
-    .attr('height', height / 2)
+    .attr('height', height / 4)
     .attr("transform", "translate(50,600)")
     .on('mouseover', mouseover3)
     .on('mousemove', mousemove3)
@@ -1144,7 +1144,7 @@ else
     .style("pointer-events", "all")
     .attr('class', 'tooltip')
     .attr('width', width / 2)
-    .attr('height', height / 2)
+    .attr('height', height / 4)
     .attr("transform",  "translate(50,900)")
     .on('mouseover', mouseover4)
     .on('mousemove', mousemove4)

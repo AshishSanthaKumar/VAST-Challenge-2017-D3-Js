@@ -737,7 +737,7 @@ function drawLineChart()
     console.log("inside linechart")
     // set the dimensions and margins of the graph
 var lineSvg;
-var margin = {top: 30, right: 20, bottom: 50, left: 50},
+var margin = {top: 30, right: 20, bottom: 400, left: 50},
 width = 960 - margin.left - margin.right,
 height = 1000 - margin.top - margin.bottom;
 
@@ -853,8 +853,8 @@ var valueline4 = d3.line()
 // we are appending SVG first
 lineSvg = d3.select("#line-container").append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("width", width + margin.left + margin.right+50)
-    .attr("height", height + margin.top + margin.bottom+50)
+    .attr("width", 500)
+    .attr("height", height + margin.top + margin.bottom-200)
     //.style("padding", padding)
     .style("margin", margin)
     .classed("svg-content", true);
@@ -877,7 +877,7 @@ lineSvg = d3.select("#line-container").append("svg")
       .datum(new_data)
       .attr("class", "line")
       .style("stroke", "#A6CEE3")
-      .attr("transform", "translate(50,0)")
+      .attr("transform", "translate(50,30)")
       .attr("d", valueline1);
 
       lineSvg.selectAll("dot")
@@ -893,7 +893,7 @@ else
 }
 })
 .attr("fill", "red")
-.attr("transform", "translate(50,0)")
+.attr("transform", "translate(50,30)")
 .attr("cx", function(d) { 
  return x(new Date(d.date)); })
 .attr("cy", function(d) { 
@@ -903,7 +903,7 @@ else
   var focus1 = lineSvg
     .append('g')
     .append('circle')
-    .attr("transform","translate(50,0)")
+    .attr("transform","translate(50,30)")
     .style("fill", "none")
     .attr("stroke", "black")
     .attr('r', 0)
@@ -914,8 +914,8 @@ else
     .style("fill", "none")
     .style("pointer-events", "all")
     .attr('width', width / 2)
-    .attr('height', height / 2)
-    .attr("transform", "translate(50,0)")
+    .attr('height', height / 4)
+    .attr("transform", "translate(50,30)")
     .on('mouseover', mouseover1)
     .on('mousemove', mousemove1)
     .on('mouseout', mouseout1);
@@ -954,7 +954,7 @@ else
       .attr("class", "line")
       .attr("stroke-width", 0.1)
       .style("stroke", "#B2DF8A")
-      .attr("transform",  "translate(50,300)")
+      .attr("transform",  "translate(50,230)")
       .attr("d", valueline2);
 
       lineSvg.selectAll("dot")
@@ -970,7 +970,7 @@ else
       }
       })
       .attr("fill", "red")
-      .attr("transform",  "translate(50,300)")
+      .attr("transform",  "translate(50,230)")
       .attr("cx", function(d) { 
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
@@ -980,7 +980,7 @@ else
   var focus2 = lineSvg
     .append('g')
     .append('circle')
-    .attr("transform", "translate(50,300)")
+    .attr("transform", "translate(50,230)")
     .style("fill", "none")
     .attr("stroke", "black")
     .attr('r', 0)
@@ -991,8 +991,8 @@ else
     .style("fill", "none")
     .style("pointer-events", "all")
     .attr('width', width / 2)
-    .attr('height', height / 2)
-    .attr("transform",  "translate(50,300)")
+    .attr('height', height / 4)
+    .attr("transform",  "translate(50,230)")
     .on('mouseover', mouseover2)
     .on('mousemove', mousemove2)
     .on('mouseout', mouseout2);
@@ -1030,7 +1030,7 @@ else
       .attr("class", "line")
       .style("stroke", "#FB9A99")
       .attr("stroke-width", 0.1)
-      .attr("transform","translate(50,600)")
+      .attr("transform","translate(50,430)")
       .attr("d", valueline3);
 
       lineSvg.selectAll("dot")
@@ -1046,7 +1046,7 @@ else
       }
       })
       .attr("fill", "red")
-      .attr("transform","translate(50,600)")
+      .attr("transform", "translate(50,430)")
       .attr("cx", function(d) { 
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
@@ -1056,7 +1056,7 @@ else
   var focus3 = lineSvg
     .append('g')
     .append('circle')
-    .attr("transform","translate(50,600)")
+    .attr("transform","translate(50,430)")
     .style("fill", "none")
     .attr("stroke", "black")
     .attr('r', 0)
@@ -1066,9 +1066,10 @@ else
     .append('rect')
     .style("fill", "none")
     .style("pointer-events", "all")
+    .attr('class', 'tooltip')
     .attr('width', width / 2)
-    .attr('height', height / 2)
-    .attr("transform", "translate(50,600)")
+    .attr('height', height / 4)
+    .attr("transform", "translate(50,430)")
     .on('mouseover', mouseover3)
     .on('mousemove', mousemove3)
     .on('mouseout', mouseout3);
@@ -1088,14 +1089,13 @@ else
     div.transition().duration(50).style("opacity", 0.8);
 
     div.html("Date: " + selectedData.date + "<br /> Chlorodinine Concentration: " + selectedData.Chlorodinine + "</b>")
-    .style("text-align","left")
-    .style("left", (d3.event.pageX) + "px")
-    .style("top", (d3.event.pageY - 15) + "px");
+      .style("left", (d3.event.pageX) + 15 + "px")
+      .style("top", (d3.event.pageY) - 45 + "px");
 
   }
   function mouseout3() {
 
-    focus3.style("opacity", 0);
+    focus4.style("opacity", 0);
     div.transition().duration('50').style("opacity", 0);
   }
 
@@ -1106,7 +1106,7 @@ else
       .attr("class", "line")
       .style("stroke", "#6A3D9A")
       .attr("stroke-width", 1.5)
-      .attr("transform",  "translate(50,900)")
+      .attr("transform", "translate(50,630)")
       .attr("d", valueline4);
 
       lineSvg.selectAll("dot")
@@ -1122,7 +1122,7 @@ else
       }
       })
       .attr("fill", "red")
-      .attr("transform", "translate(50,900)")
+      .attr("transform","translate(50,630)")
       .attr("cx", function(d) { 
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
@@ -1132,7 +1132,7 @@ else
   var focus4 = lineSvg
     .append('g')
     .append('circle')
-    .attr("transform",  "translate(50,900)")
+    .attr("transform", "translate(50,630)")
     .style("fill", "none")
     .attr("stroke", "black")
     .attr('r', 0)
@@ -1144,8 +1144,8 @@ else
     .style("pointer-events", "all")
     .attr('class', 'tooltip')
     .attr('width', width / 2)
-    .attr('height', height / 2)
-    .attr("transform",  "translate(50,900)")
+    .attr('height', height / 4)
+    .attr("transform", "translate(50,630)")
     .on('mouseover', mouseover4)
     .on('mousemove', mousemove4)
     .on('mouseout', mouseout4);
@@ -1181,7 +1181,7 @@ else
   
 // Add the 1st X Axis
 lineSvg.append("g")
-.attr("transform", `translate(50, 230)`)
+.attr("transform", `translate(50, 173)`)
 
 .call(d3.axisBottom(x)
 .ticks(d3.timeDay.every(2))
@@ -1195,11 +1195,11 @@ lineSvg.append("g")
  // Add the 1st Y Axis
   lineSvg.append("g")
       .call(d3.axisLeft(y1))
-      .attr("transform", "translate(50,0)")
+      .attr("transform", "translate(50,30)")
 
 // Add the 2nd X Axis
 lineSvg.append("g")
-.attr("transform", `translate(50, 530)`)
+.attr("transform", `translate(50, 373)`)
 
 .call(d3.axisBottom(x)
 .ticks(d3.timeDay.every(2))
@@ -1213,11 +1213,11 @@ lineSvg.append("g")
 // Add the 2nd Y Axis
 lineSvg.append("g")
 .call(d3.axisLeft(y2))
-.attr("transform", "translate(50,300)");
+.attr("transform", "translate(50,230)");
   
 // Add the 3rd X Axis
 lineSvg.append("g")
-.attr("transform","translate(50,830)")
+.attr("transform","translate(50,573)")
 
 .call(d3.axisBottom(x)
 .ticks(d3.timeDay.every(2))
@@ -1231,11 +1231,11 @@ lineSvg.append("g")
 // Add the 3rd  Y Axis
   lineSvg.append("g")
       .call(d3.axisLeft(y3))
-      .attr("transform", "translate(50,600)");
+      .attr("transform", "translate(50,430)");
 
 // Add the 4th X Axis
 lineSvg.append("g")
-.attr("transform", `translate(50, 1130)`)
+.attr("transform", `translate(50, 773)`)
 
 .call(d3.axisBottom(x)
 .ticks(d3.timeDay.every(2))
@@ -1249,8 +1249,54 @@ lineSvg.append("g")
 // Add the 4th  Y Axis
 lineSvg.append("g")
 .call(d3.axisLeft(y4))
-.attr("transform", "translate(50,900)");
+.attr("transform", "translate(50,630)");
+
+// text label for the y axis1
+lineSvg.append("text")
+.attr("transform", "rotate(-90)")
+//.attr("id", "y-label")
+.attr("y", 0)
+.attr("x",-100 )
+.attr("dy", "1em")
+.style("text-anchor", "middle")
+.style("stroke","rgb(166, 206, 227")
+.text("AGOC_3A"); 
+
+
+// text label for the y axis2
+lineSvg.append("text")
+.attr("transform", "rotate(-90)")
+//.attr("id", "y-label")
+.attr("y", 0)
+.attr("x",-300 )
+.attr("dy", "1em")
+.style("text-anchor", "middle")
+.style("stroke","rgb(178, 223, 138")
+.text("Appluimonia"); 
     
+
+// text label for the y axis3
+lineSvg.append("text")
+.attr("transform", "rotate(-90)")
+//.attr("id", "y-label")
+.attr("y", 0)
+.attr("x",-500 )
+.attr("dy", "1em")
+.style("text-anchor", "middle")
+.style("stroke","rgb(251, 154, 153")
+.text("Chlorodinine"); 
+
+
+// text label for the y axis4
+lineSvg.append("text")
+.attr("transform", "rotate(-90)")
+//.attr("id", "y-label")
+.attr("y", 0)
+.attr("x",-700 )
+.attr("dy", "1em")
+.style("text-anchor", "middle")
+.style("stroke","rgb(106, 61, 154")
+.text("Chlorodinine");
     });
 
  

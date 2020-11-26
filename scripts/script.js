@@ -577,10 +577,6 @@ function drawRadialChart() {
 }
 
 function drawHeatMap(){
-    // d3.select("#heatmap").selectAll("*").remove();
-    
-    
-    // sensorval = document.getElementById('sensor').value;
     if(selectedSensor == 'All'){
         sensorval = 1;
     }
@@ -599,13 +595,14 @@ function drawHeatMap(){
           gridSize = Math.floor(width / 35),
           legendElementWidth = gridSize*2,
           buckets = 9,
-          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
+          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"]//d3.schemePurples[9], // alternatively colorbrewer.YlGnBu[9]
           days = ["AGOC-3A", "Appluimonia", "Chlorodinine", "Methylosmolene"],
           times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
           datasets = [`../MC2Data/sensor_${sensorval}_new.json`];
 
           
     d3.select("#heatmap").selectAll("*").remove();
+    d3.select("#heatmap").selectAll(".legend").selectAll("*").remove();
       var svg = d3.select("#heatmap").append("svg")
           .attr("width", width + margin.left + margin.right +100)
           .attr("height", height + margin.top + margin.bottom)
@@ -685,25 +682,31 @@ function drawHeatMap(){
           
           cards.exit().remove();
 
-        //   var legend = d3.select('#legendheatmap').selectAll(".legend")
-        //       .data([0].concat(colorScale.quantiles()));
+          var legend = d3.select('#heatmap svg').selectAll(".legend")
+              .data([0].concat(colorScale.quantiles()));
+            console.log([0].concat(colorScale.quantiles()))
 
-        //   legend.enter().append("rect")
-        //       .attr("class", "legend")
+            legend.enter().append("g")
+            .attr("class", "legend")
+            .attr("transform","translate(210,180)");
 
-        //       .attr("x", 100)
-        //       .attr("y", 200)
-        //       .attr("width", legendElementWidth)
-        //       .attr("height", gridSize / 2)
-        //       .style("fill", function(d, i) { return colors[i]; });
+              legend.append("rect")
+            //   .attr("class", "legend")
+              .attr("x", function(d,i){
+                return legendElementWidth*i;
+              })
+              .attr("y", 0)
+              .attr("width", legendElementWidth)
+              .attr("height", gridSize / 2)
+              .style("fill", function(d, i) { return colors[i]; });
 
-        //   legend.append("text")
-        //     .attr("class", "mono")
-        //     .text(function(d) { return "≥ " + Math.round(d); })
-        //     .attr("x", function(d, i) { return legendElementWidth * i; })
-        //     .attr("y", height + gridSize);
+               
+          legend.append("text")
+            .attr("class", "mono")
+            .text(function(d) { return "≥" +d.toFixed(2) + ' '; })
+            .attr("x", function(d, i) { return legendElementWidth * i + 10; })
+            .attr("y", 25);
 
-        //   legend.exit().remove();
 
         });  
 }

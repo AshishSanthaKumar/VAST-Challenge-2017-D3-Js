@@ -67,14 +67,14 @@ function drawSensors(data) {
 
     svg.on('click', function (d, i) {
 
-        svg.selectAll(".radarSensor")
-            .transition().duration(50)
-            .style("opacity", 1);
+            svg.selectAll(".radarSensor")
+                .transition().duration(50)
+                .style("opacity", 1);
             onSensorSelected({
-                'name':'All'
+                'name': 'All'
             });
-    }
-  
+        }
+
     );
 
 
@@ -149,8 +149,8 @@ function drawLegend() {
 function drawMap() {
 
     let axes = {
-        x: d3.axisBottom(d3.scaleLinear().domain([pixelToMiles(xPixelRange[0]), pixelToMiles(xPixelRange[1])]).range(mainChartRange)),
-        y: d3.axisLeft(d3.scaleLinear().domain([pixelToMiles(yPixelRange[0]), pixelToMiles(yPixelRange[1])]).range(mainChartRange)).ticks(8)
+        x: d3.axisBottom(d3.scaleLinear().domain([gridToMiles(xPixelRange[0]), gridToMiles(xPixelRange[1])]).range(mainChartRange)),
+        y: d3.axisLeft(d3.scaleLinear().domain([gridToMiles(yPixelRange[0]), gridToMiles(yPixelRange[1])]).range(mainChartRange)).ticks(8)
     };
 
     svg.append('g')

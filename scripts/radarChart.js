@@ -33,12 +33,12 @@ function RadarChart(currSensor, data, color, location, config) {
 
 			onSensorSelected(d3.select(this).data()[0]);
 			//drawHeatmap(parseInt(d3.select(this).data()[0]['name'][6]));
-			
+
 
 		})
 		.on('mouseover', function (d, i) {
 			addPossibleSourceLine(d3.select(this))
-			
+
 		})
 		.on('mouseout', () => {
 			svg.selectAll(".possibleSource")
@@ -239,6 +239,9 @@ function RadarChart(currSensor, data, color, location, config) {
 				.range([0, radius])
 				.domain([0, maxValue]);
 
+			//ticks text
+			svg.select(`.radar${_sensor.name}`).selectAll(".axisLabel")
+				.text(d => roundDecimals(maxValue * d / config.levels));
 
 			const radarLine = d3.radialLine()
 				.curve(d3.curveLinearClosed)

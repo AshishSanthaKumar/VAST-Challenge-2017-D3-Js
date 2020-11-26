@@ -87,7 +87,7 @@ var mainChartConfig = {
 
 
 
-let pixelToMiles = d3.scaleLinear()
+let gridToMiles = d3.scaleLinear()
     .domain([0, 200]).range([0, 12]);
 
 let xPixelRange = [50, 125];
@@ -141,7 +141,7 @@ let possibleChemicalSource = [{
     }, {
         name: 'Sensor5',
         direction: 'SSW',
-        factories: ['Radiance-ColourTek']
+        factories: ['Roadrunner-Fitness-Electronics']
     },
     {
         name: 'Sensor5',
@@ -150,8 +150,8 @@ let possibleChemicalSource = [{
     },
     {
         name: 'Sensor5',
-        direction: 'SSW',
-        factories: ['Roadrunner-Fitness-Electronics']
+        direction: 'SSE',
+        factories: ['Radiance-ColourTek']
     },
     {
         name: 'Sensor4',
@@ -221,6 +221,10 @@ let possibleChemicalSource = [{
         name: 'Sensor6',
         direction: 'ESE',
         factories: ['Radiance-ColourTek', 'Indigo-Sol-Boards']
+    }, {
+        name: 'Sensor6',
+        direction: 'ENE',
+        factories: ['Radiance-ColourTek']
     }, {
         name: 'Sensor6',
         direction: 'W',

@@ -578,7 +578,8 @@ function drawRadialChart() {
 
 function drawHeatMap(){
     if(selectedSensor == 'All'){
-        sensorval = 1;
+        // sensorval = 1;
+        return;
     }
     else{
         sensorval = parseInt(selectedSensor[6]);
@@ -686,26 +687,26 @@ function drawHeatMap(){
               .data([0].concat(colorScale.quantiles()));
             console.log([0].concat(colorScale.quantiles()))
 
-            legend.enter().append("g")
-            .attr("class", "legend")
-            .attr("transform","translate(210,180)");
+            // legend.enter().append("g")
+            // .attr("class", "legend")
+            // .attr("transform","translate(210,180)");
 
-              legend.append("rect")
+              legend.enter().append("rect")
             //   .attr("class", "legend")
               .attr("x", function(d,i){
-                return legendElementWidth*i;
+                return legendElementWidth*i + 210;
               })
-              .attr("y", 0)
+              .attr("y", 180)
               .attr("width", legendElementWidth)
               .attr("height", gridSize / 2)
               .style("fill", function(d, i) { return colors[i]; });
 
                
-          legend.append("text")
+          legend.enter().append("text")
             .attr("class", "mono")
             .text(function(d) { return "≥" +d.toFixed(2) + ' '; })
-            .attr("x", function(d, i) { return legendElementWidth * i + 10; })
-            .attr("y", 25);
+            .attr("x", function(d, i) { return legendElementWidth * i + 10 + 210; })
+            .attr("y", 205);
 
 
         });  

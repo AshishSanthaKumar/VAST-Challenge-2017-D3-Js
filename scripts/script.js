@@ -736,7 +736,7 @@ function drawLineChart()
 var lineSvg;
 var margin = {top: 30, right: 20, bottom: 50, left: 50},
 width = 960 - margin.left - margin.right,
-height = 500 - margin.top - margin.bottom;
+height = 1000 - margin.top - margin.bottom;
 
 
 
@@ -746,11 +746,11 @@ var timeConv = d3.timeParse("%Y-%m-%d %H:%M:%S");
      // set the ranges
 var x = d3.scaleTime().range([0, width/2]);
 var bisect = d3.bisector(function(d) { return d.x; }).left;
-var y = d3.scaleLinear().rangeRound([height/2, 0]);
-var y1 = d3.scaleLinear().rangeRound([height/2, 0]);
-var y2 = d3.scaleLinear().rangeRound([height/2, 0]);
-var y3 = d3.scaleLinear().rangeRound([height/2, 0]);
-var y4 = d3.scaleLinear().rangeRound([height/2, 0]);
+var y = d3.scaleLinear().rangeRound([height/4, 0]);
+var y1 = d3.scaleLinear().rangeRound([height/4, 0]);
+var y2 = d3.scaleLinear().rangeRound([height/4, 0]);
+var y3 = d3.scaleLinear().rangeRound([height/4, 0]);
+var y4 = d3.scaleLinear().rangeRound([height/4, 0]);
 
 
 // define the 1st line
@@ -874,7 +874,7 @@ lineSvg = d3.select("#line-container").append("svg")
       .datum(new_data)
       .attr("class", "line")
       .style("stroke", "#A6CEE3")
-      .attr("transform", "translate(50,10)")
+      .attr("transform", "translate(50,0)")
       .attr("d", valueline1);
 
       lineSvg.selectAll("dot")
@@ -890,7 +890,7 @@ else
 }
 })
 .attr("fill", "red")
-.attr("transform", "translate(50,10)")
+.attr("transform", "translate(50,0)")
 .attr("cx", function(d) { 
  return x(new Date(d.date)); })
 .attr("cy", function(d) { 
@@ -900,10 +900,10 @@ else
   var focus1 = lineSvg
     .append('g')
     .append('circle')
-    .attr("transform", "translate(50,10)")
+    .attr("transform","translate(50,0)")
     .style("fill", "none")
     .attr("stroke", "black")
-    .attr('r', 5)
+    .attr('r', 0)
     .style("opacity", 0);
 
   lineSvg
@@ -912,7 +912,7 @@ else
     .style("pointer-events", "all")
     .attr('width', width / 2)
     .attr('height', height / 2)
-    .attr("transform", "translate(50,10)")
+    .attr("transform", "translate(50,0)")
     .on('mouseover', mouseover1)
     .on('mousemove', mousemove1)
     .on('mouseout', mouseout1);
@@ -951,7 +951,7 @@ else
       .attr("class", "line")
       .attr("stroke-width", 0.1)
       .style("stroke", "#B2DF8A")
-      .attr("transform", `translate(${105 + width/2},10)`)
+      .attr("transform",  "translate(50,300)")
       .attr("d", valueline2);
 
       lineSvg.selectAll("dot")
@@ -967,7 +967,7 @@ else
       }
       })
       .attr("fill", "red")
-      .attr("transform", `translate(${105 + width/2},10)`)
+      .attr("transform",  "translate(50,300)")
       .attr("cx", function(d) { 
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
@@ -977,10 +977,10 @@ else
   var focus2 = lineSvg
     .append('g')
     .append('circle')
-    .attr("transform", `translate(${105 + width/2},10)`)
+    .attr("transform", "translate(50,300)")
     .style("fill", "none")
     .attr("stroke", "black")
-    .attr('r', 5)
+    .attr('r', 0)
     .style("opacity", 0);
 
   lineSvg
@@ -989,7 +989,7 @@ else
     .style("pointer-events", "all")
     .attr('width', width / 2)
     .attr('height', height / 2)
-    .attr("transform", `translate(${105 + width/2},10)`)
+    .attr("transform",  "translate(50,300)")
     .on('mouseover', mouseover2)
     .on('mousemove', mousemove2)
     .on('mouseout', mouseout2);
@@ -1027,7 +1027,7 @@ else
       .attr("class", "line")
       .style("stroke", "#FB9A99")
       .attr("stroke-width", 0.1)
-      .attr("transform", `translate(50,${height/2 + 80})`)
+      .attr("transform","translate(50,600)")
       .attr("d", valueline3);
 
       lineSvg.selectAll("dot")
@@ -1043,7 +1043,7 @@ else
       }
       })
       .attr("fill", "red")
-      .attr("transform", `translate(50,${height/2 + 80})`)
+      .attr("transform","translate(50,600)")
       .attr("cx", function(d) { 
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
@@ -1053,10 +1053,10 @@ else
   var focus3 = lineSvg
     .append('g')
     .append('circle')
-    .attr("transform", `translate(50,${height/2 + 80})`)
+    .attr("transform","translate(50,600)")
     .style("fill", "none")
     .attr("stroke", "black")
-    .attr('r', 5)
+    .attr('r', 0)
     .style("opacity", 0);
 
   lineSvg
@@ -1065,7 +1065,7 @@ else
     .style("pointer-events", "all")
     .attr('width', width / 2)
     .attr('height', height / 2)
-    .attr("transform", `translate(50,${height/2 + 80})`)
+    .attr("transform", "translate(50,600)")
     .on('mouseover', mouseover3)
     .on('mousemove', mousemove3)
     .on('mouseout', mouseout3);
@@ -1103,7 +1103,7 @@ else
       .attr("class", "line")
       .style("stroke", "#6A3D9A")
       .attr("stroke-width", 1.5)
-      .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
+      .attr("transform",  "translate(50,900)")
       .attr("d", valueline4);
 
       lineSvg.selectAll("dot")
@@ -1119,7 +1119,7 @@ else
       }
       })
       .attr("fill", "red")
-      .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
+      .attr("transform", "translate(50,900)")
       .attr("cx", function(d) { 
         return x(new Date(d.date)); })
       .attr("cy", function(d) { 
@@ -1129,10 +1129,10 @@ else
   var focus4 = lineSvg
     .append('g')
     .append('circle')
-    .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
+    .attr("transform",  "translate(50,900)")
     .style("fill", "none")
     .attr("stroke", "black")
-    .attr('r', 5)
+    .attr('r', 0)
     .style("opacity", 0);
 
   lineSvg
@@ -1142,7 +1142,7 @@ else
     .attr('class', 'tooltip')
     .attr('width', width / 2)
     .attr('height', height / 2)
-    .attr("transform", `translate(${105 + width/2},${height/2 + 80})`)
+    .attr("transform",  "translate(50,900)")
     .on('mouseover', mouseover4)
     .on('mousemove', mousemove4)
     .on('mouseout', mouseout4);
@@ -1178,7 +1178,7 @@ else
   
 // Add the 1st X Axis
 lineSvg.append("g")
-.attr("transform", `translate(50, 220)`)
+.attr("transform", `translate(50, 230)`)
 
 .call(d3.axisBottom(x)
 .ticks(d3.timeDay.every(2))
@@ -1192,11 +1192,11 @@ lineSvg.append("g")
  // Add the 1st Y Axis
   lineSvg.append("g")
       .call(d3.axisLeft(y1))
-      .attr("transform", "translate(50,10)")
+      .attr("transform", "translate(50,0)")
 
 // Add the 2nd X Axis
 lineSvg.append("g")
-.attr("transform", `translate(550, 220)`)
+.attr("transform", `translate(50, 530)`)
 
 .call(d3.axisBottom(x)
 .ticks(d3.timeDay.every(2))
@@ -1210,11 +1210,11 @@ lineSvg.append("g")
 // Add the 2nd Y Axis
 lineSvg.append("g")
 .call(d3.axisLeft(y2))
-.attr("transform", "translate(550,10)");
+.attr("transform", "translate(50,300)");
   
 // Add the 3rd X Axis
 lineSvg.append("g")
-.attr("transform", `translate(50, ${height + 80})`)
+.attr("transform","translate(50,830)")
 
 .call(d3.axisBottom(x)
 .ticks(d3.timeDay.every(2))
@@ -1228,11 +1228,11 @@ lineSvg.append("g")
 // Add the 3rd  Y Axis
   lineSvg.append("g")
       .call(d3.axisLeft(y3))
-      .attr("transform", "translate(50,290)");
+      .attr("transform", "translate(50,600)");
 
 // Add the 4th X Axis
 lineSvg.append("g")
-.attr("transform", `translate(550, 500)`)
+.attr("transform", `translate(50, 1130)`)
 
 .call(d3.axisBottom(x)
 .ticks(d3.timeDay.every(2))
@@ -1246,7 +1246,7 @@ lineSvg.append("g")
 // Add the 4th  Y Axis
 lineSvg.append("g")
 .call(d3.axisLeft(y4))
-.attr("transform", "translate(550,290)");
+.attr("transform", "translate(50,900)");
     
     });
 

@@ -577,9 +577,10 @@ function drawRadialChart() {
 }
 
 function drawHeatMap(){
+    d3.selectAll(".mono").remove();
     if(selectedSensor == 'All'){
-        // sensorval = 1;
-        return;
+        sensorval = 'All';
+        // return;
     }
     else{
         sensorval = parseInt(selectedSensor[6]);
@@ -603,7 +604,7 @@ function drawHeatMap(){
 
           
     d3.select("#heatmap").selectAll("*").remove();
-    d3.select("#heatmap").selectAll(".legend").selectAll("*").remove();
+    
       var svg = d3.select("#heatmap").append("svg")
           .attr("width", width + margin.left + margin.right +100)
           .attr("height", height + margin.top + margin.bottom)

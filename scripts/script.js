@@ -592,7 +592,7 @@ function drawHeatMap(){
                     .split("T")[0];
     
     var margin = { top: 50, right: 0, bottom: 100, left: 30 },
-          width = 960 - margin.left - margin.right,
+          width = 900 - margin.left - margin.right,
           height = 430 - margin.top - margin.bottom,
           gridSize = Math.floor(width / 35),
           legendElementWidth = gridSize*2,

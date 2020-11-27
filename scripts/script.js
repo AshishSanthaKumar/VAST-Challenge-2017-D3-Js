@@ -856,7 +856,7 @@ var valueline4 = d3.line()
 lineSvg = d3.select("#line-container").append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
     .attr("width", 500)
-    .attr("height", height + margin.top + margin.bottom-200)
+    .attr("height", height + margin.top + margin.bottom-100)
     //.style("padding", padding)
     .style("margin", margin)
     .classed("svg-content", true);

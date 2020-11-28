@@ -780,7 +780,7 @@ var valueline4 = d3.line()
     .y(function(d) { return y4(d.Methylosmolene); }); 
     
     if(selectedSensor == 'All'){
-        sensorval = 1;
+        sensorval = "main";
     }
     else{
         sensorval = parseInt(selectedSensor[6]);
@@ -1178,9 +1178,17 @@ else
   }
 
 
-      
+lineSvg.append("text")
+      .attr("x", width/2 - 180)             
+      .attr("y",  margin.top - 20)
+      .attr("text-anchor", "middle")  
+      .style("font-size", "11px") 
+      .style("text-decoration", "underline")  
+      .text(selectedSensor=='All'?'Average chemical reading of all the Sensors in the time frame':('Average chemical reading from Sensor '+selectedSensor.slice(-1)+' in the  time frame'));
 
-  
+
+
+
 // Add the 1st X Axis
 lineSvg.append("g")
 .attr("transform", `translate(50, 173)`)

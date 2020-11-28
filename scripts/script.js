@@ -159,7 +159,8 @@ function drawTimeline() {
 }
 
 function drawAllCharts()
-{   drawLineChart();
+{    d3.select("#heatmap").selectAll("*").remove();
+     drawLineChart();
     drawColumnChart();
     drawRadialChart();
     drawHeatMap();
@@ -167,7 +168,7 @@ function drawAllCharts()
 
 
 function drawColumnChart() {
-
+    
     var columnSvg;
     const margin = {
         top: 50,
@@ -577,6 +578,8 @@ function drawRadialChart() {
 }
 
 function drawHeatMap(){
+    console.log('Inside Heatmap Chart');
+   
     d3.selectAll(".mono").remove();
     if(selectedSensor == 'All'){
         sensorval = 'All';
@@ -642,9 +645,9 @@ function drawHeatMap(){
             .attr("x", width/4 + 50)             
             .attr("y", -32)
             .attr("text-anchor", "middle")  
-            .style("font-size", "15px") 
+            .style("font-size", "13px") 
             .style("text-decoration", "underline")
-            .text("Heatmap")  
+            .text(selectedSensor=='All'?('Chemical reading of all the Sensors on '+startdateString):('Chemical reading of Sensor '+selectedSensor.slice(-1)+' on '+startdateString)); 
 
       
       d3.json(datasets[0]).then(
@@ -698,7 +701,7 @@ function drawHeatMap(){
           
           cards.exit().remove();
 
-          var legend = d3.select('#heatmap svg').selectAll(".legend")
+          var legend = svg.selectAll(".legend")
               .data([0].concat(colorScale.quantiles()));
             console.log([0].concat(colorScale.quantiles()))
 

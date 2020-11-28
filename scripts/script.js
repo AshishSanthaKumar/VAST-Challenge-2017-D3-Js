@@ -1358,7 +1358,7 @@ lineSvg.append("text")
 .attr("dy", "1em")
 .style("text-anchor", "middle")
 .style("stroke","rgb(106, 61, 154")
-.text("Chlorodinine");
+.text("Methylosmolene");
     });
 
  

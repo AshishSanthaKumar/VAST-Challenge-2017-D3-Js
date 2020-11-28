@@ -1177,16 +1177,46 @@ else
     div.transition().duration('50').style("opacity", 0);
   }
 
-
-lineSvg.append("text")
-      .attr("x", width/2 - 180)             
+if(selectedMethod == "reading")
+{
+  lineSvg.append("text")
+      .attr("x", width/2 - 190)             
       .attr("y",  margin.top - 20)
       .attr("text-anchor", "middle")  
       .style("font-size", "11px") 
       .style("text-decoration", "underline")  
-      .text(selectedSensor=='All'?'Average chemical reading of all the Sensors in the time frame':('Average chemical reading from Sensor '+selectedSensor.slice(-1)+' in the  time frame'));
-
-
+      .text(selectedSensor=='All'?'Chemical reading of all the Sensors in the time frame':('Chemical reading of Sensor '+selectedSensor.slice(-1)+' in the  time frame'));
+}
+else if(selectedMethod == "cum_sum")
+{
+  lineSvg.append("text")
+      .attr("x", width/2 - 190)             
+      .attr("y",  margin.top - 20)
+      .attr("text-anchor", "middle")  
+      .style("font-size", "11px") 
+      .style("text-decoration", "underline")  
+      .text(selectedSensor=='All'?'Cumulative Summation of chemical reading of all the Sensors in the time frame':('Cumulative Summation of chemical reading of Sensor '+selectedSensor.slice(-1)+' in the  time frame'));
+}
+else if(selectedMethod == "cube")
+{
+  lineSvg.append("text")
+      .attr("x", width/2 - 190)             
+      .attr("y",  margin.top - 20)
+      .attr("text-anchor", "middle")  
+      .style("font-size", "11px") 
+      .style("text-decoration", "underline")  
+      .text(selectedSensor=='All'?'Cube of chemical reading of all the Sensors in the time frame':('Cube of chemical reading of Sensor '+selectedSensor.slice(-1)+' in the  time frame'));
+}
+else if(selectedMethod == "square_root")
+{
+  lineSvg.append("text")
+      .attr("x", width/2 - 190)             
+      .attr("y",  margin.top - 20)
+      .attr("text-anchor", "middle")  
+      .style("font-size", "11px") 
+      .style("text-decoration", "underline")  
+      .text(selectedSensor=='All'?'Square Root of chemical reading of all the Sensors in the time frame':('Square Root of chemical reading of Sensor '+selectedSensor.slice(-1)+' in the  time frame'));
+}
 
 
 // Add the 1st X Axis

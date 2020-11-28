@@ -593,7 +593,7 @@ function drawHeatMap(){
     
     var margin = { top: 50, right: 0, bottom: 100, left: 30 },
           width = 900 - margin.left - margin.right - 150,
-          height = 430 - margin.top - margin.bottom - 50,
+          height = 430 - margin.top - margin.bottom - 55,
           gridSize = Math.floor(width / 35),
           legendElementWidth = gridSize*2.25,
           buckets = 9,
@@ -637,6 +637,14 @@ function drawHeatMap(){
             .style("text-anchor", "middle")
             .attr("transform", "translate(" + gridSize / 2 + ", -6)")
             .attr("class", "timeLabel mono axis axis-worktime");
+
+            svg.append("text")
+            .attr("x", width/4 + 50)             
+            .attr("y", -32)
+            .attr("text-anchor", "middle")  
+            .style("font-size", "15px") 
+            .style("text-decoration", "underline")
+            .text("Heatmap")  
 
       
       d3.json(datasets[0]).then(
@@ -716,6 +724,10 @@ function drawHeatMap(){
             .attr("x", function(d, i) { return legendElementWidth * i + 10 + 155; })
             .attr("y", 170);
 
+            legend.append("text")
+            .text('Heatmap')
+            .attr("x", 10)
+            .attr("y", 10);
 
         });  
 }

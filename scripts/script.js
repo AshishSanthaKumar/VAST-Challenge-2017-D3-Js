@@ -592,10 +592,10 @@ function drawHeatMap(){
                     .split("T")[0];
     
     var margin = { top: 50, right: 0, bottom: 100, left: 30 },
-          width = 900 - margin.left - margin.right,
-          height = 430 - margin.top - margin.bottom,
-          gridSize = Math.floor(width / 45),
-          legendElementWidth = gridSize*2,
+          width = 900 - margin.left - margin.right - 150,
+          height = 430 - margin.top - margin.bottom - 50,
+          gridSize = Math.floor(width / 35),
+          legendElementWidth = gridSize*2.25,
           buckets = 9,
           colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"]//d3.schemePurples[9], // alternatively colorbrewer.YlGnBu[9]
           days = ["AGOC-3A", "Appluimonia", "Chlorodinine", "Methylosmolene"],
@@ -611,6 +611,7 @@ function drawHeatMap(){
 
     
       var svg = d3.select("#heatmap").append("svg")
+          .attr('id','heatsvg')
           .attr("width", width )
           .attr("height", height)
           .append("g")
@@ -700,9 +701,9 @@ function drawHeatMap(){
               legend.enter().append("rect")
             //   .attr("class", "legend")
               .attr("x", function(d,i){
-                return legendElementWidth*i + 210;
+                return legendElementWidth*i + 160;
               })
-              .attr("y", 180)
+              .attr("y", 150)
               .attr("width", legendElementWidth)
               .attr("height", gridSize / 2)
               .style("fill", function(d, i) { return colors[i]; });
@@ -712,8 +713,8 @@ function drawHeatMap(){
             .attr("class", "mono")
             .attr("id","heatmaptext")
             .text(function(d) { return "≥" +d.toFixed(2) + ' '; })
-            .attr("x", function(d, i) { return legendElementWidth * i + 10 + 210; })
-            .attr("y", 205);
+            .attr("x", function(d, i) { return legendElementWidth * i + 10 + 155; })
+            .attr("y", 170);
 
 
         });  

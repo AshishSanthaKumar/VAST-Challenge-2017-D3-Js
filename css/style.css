@@ -113,7 +113,7 @@
   }
 
   text.mono {
-    font-size: 7pt;
+    font-size: 6.5pt;
     font-family: Consolas, courier;
     fill: #aaa;
   }
@@ -193,6 +193,12 @@
 
 
     #line-container svg {
+      border:1px solid gray;
+      margin:10px;
+    
+    }
+
+    #heatsvg{
       border:1px solid gray;
       margin:10px;
     

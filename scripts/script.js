@@ -593,7 +593,7 @@ function drawHeatMap(){
     
     var margin = { top: 50, right: 0, bottom: 100, left: 30 },
           width = 900 - margin.left - margin.right - 150,
-          height = 430 - margin.top - margin.bottom - 55,
+          height = 430 - margin.top - margin.bottom - 60,
           gridSize = Math.floor(width / 35),
           legendElementWidth = gridSize*2.25,
           buckets = 9,

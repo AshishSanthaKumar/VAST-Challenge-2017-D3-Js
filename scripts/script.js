@@ -607,10 +607,10 @@ function drawHeatMap(){
        //   
     d3.select("#heatmap").selectAll("*").remove();
 
-    // document.getElementById('#heatmaptext').remove();
+    d3.select('#heatmaptext').remove();
     // document.querySelectorAll('.mono').forEach(function(a){
     //     a.remove()
-    //     })
+    // })
 
     
       var svg = d3.select("#heatmap").append("svg")
@@ -619,6 +619,8 @@ function drawHeatMap(){
           .attr("height", height)
           .append("g")
           .attr("transform", "translate(" + (margin.left + 100)  + "," + margin.top + ")");
+
+          
 
       var dayLabels = svg.selectAll(".dayLabel")
           .data(days)
@@ -712,9 +714,9 @@ function drawHeatMap(){
               legend.enter().append("rect")
             //   .attr("class", "legend")
               .attr("x", function(d,i){
-                return legendElementWidth*i + 160;
+                return legendElementWidth*i + 20;
               })
-              .attr("y", 150)
+              .attr("y", 100)
               .attr("width", legendElementWidth)
               .attr("height", gridSize / 2)
               .style("fill", function(d, i) { return colors[i]; });
@@ -724,8 +726,8 @@ function drawHeatMap(){
             .attr("class", "mono")
             .attr("id","heatmaptext")
             .text(function(d) { return "≥" +d.toFixed(2) + ' '; })
-            .attr("x", function(d, i) { return legendElementWidth * i + 10 + 155; })
-            .attr("y", 170);
+            .attr("x", function(d, i) { return legendElementWidth * i + 25 ; })
+            .attr("y", 120);
 
             legend.append("text")
             .text('Heatmap')

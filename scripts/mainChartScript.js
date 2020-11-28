@@ -172,10 +172,10 @@ function drawMap() {
         .text('Map Y Coordinate (Miles)');
 
 
-    // svg.append('text').classed('graph-title', true)
-    //     .attr('text-anchor', 'middle')
-    //     .attr('x', mainChartConfig.w / 2).attr('y', mainChartConfig.padding)
-    //     .text("2017 VAST MC2 Map")
+    svg.append('text').classed('mainChart-title', true)
+        .attr('text-anchor', 'middle')
+        .attr('x', mainChartConfig.w / 2).attr('y', mainChartConfig.padding)
+        .text("Map view of all sensors, factories and wind direction")
 
 
 }

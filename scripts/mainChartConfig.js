@@ -1,6 +1,6 @@
 var mainChartConfig = {
-    w: 700,
-    h: 700,
+    w: 720,
+    h: 720,
 
     padding: 45,
 

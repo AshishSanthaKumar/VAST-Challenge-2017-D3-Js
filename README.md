@@ -2,7 +2,7 @@
 
 # Visual Analysis of VAST 2017 Mini Challenge 2
 
-### Team Members
+## Team Members
 
 - Raghavendhar T V (1217025576)
 - Ashish Santha Kumar (1217092981)
@@ -15,7 +15,7 @@
 
 ![Completed Visual Dashboard - D3](IMG/dashboard.png)
 
-# Installing
+## Installing
 Dependencies:
   * Python 3
 
@@ -29,7 +29,7 @@ Dependencies:
 * IMG folder - This contains the screen shot of the final dashboard
 * css folder - This contains the stylesheets for all the charts.
 
-### Running the Project
+## Running the Project
 
 To start the live server on port 8000:
 ```sh

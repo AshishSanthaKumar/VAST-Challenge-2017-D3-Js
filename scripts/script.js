@@ -1131,7 +1131,7 @@ else
       .datum(new_data)
       .attr("class", "line")
       .style("stroke", "#6A3D9A")
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 4)
       .attr("transform", "translate(50,630)")
       .attr("d", valueline4);
 

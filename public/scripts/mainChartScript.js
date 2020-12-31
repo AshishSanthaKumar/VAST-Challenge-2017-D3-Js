@@ -9,7 +9,7 @@ var windDirectionCompass;
 
 document.addEventListener('DOMContentLoaded', function () {
     //load data and preprocess
-    d3.csv("../mainchart/data/data.csv")
+    d3.csv("https://raw.githubusercontent.com/AshishSanthaKumar/VAST-Challenge-2017-D3-Js/master/mainchart/data/data.csv")
         .then(function (mainChartData) {
 
             svg = d3.select('#mainChart').append('svg')

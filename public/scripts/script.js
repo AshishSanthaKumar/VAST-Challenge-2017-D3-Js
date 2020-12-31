@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .attr("class", "tooltip-map")
     .style("opacity", 0);
     // Load all files before doing anything else
-    Promise.all([d3.csv('https://raw.githubusercontent.com/AshishSanthaKumar/VAST-Challenge-2017-D3-Js/master/MC2Data/column_formated.csv')])
+    Promise.all([d3.csv('https://raw.githubusercontent.com/AshishSanthaKumar/VAST-Challenge-2017-D3-Js/master/public/MC2Data/column_formated.csv')])
         .then(function (values) {
             globalData = values[0];
             globalData.map(function (data) {
